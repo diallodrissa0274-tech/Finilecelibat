@@ -621,7 +621,7 @@
       onComplete: async function(object) {
         if (object.reason === 'DIALOG DISMISSED') return;
         
-        if (object.transaction.status === 'approved') {
+        if (object && object.transaction && object.transaction.status === 'approved') {
           try {
             const { getUtilisateurConnecte, creerAbonnement } = await import('./backend.js');
             const user = await getUtilisateurConnecte();
