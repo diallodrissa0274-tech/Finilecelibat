@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FinileCelibat – Paiement</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rouge: #E8294A;
+      --rouge-fonce: #b01d35;
+      --or: #F4A940;
+      --noir: #0D0D0D;
+      --noir2: #141414;
+      --gris: #1e1e1e;
+      --gris2: #2a2a2a;
+      --texte: #f0ece4;
+      --texte-doux: #888079;
+      --orange-ci: #FF6B00;
+      --jaune-mtn: #FFCC00;
+      --bleu-wave: #1BA8E0;
+      --vert-moov: #00A651;
+    }
+
+    body {
+      background: var(--noir);
+      color: var(--texte);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: var(--noir2);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; }
+    .logo span { color: var(--rouge); }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--texte-doux); text-decoration: none;
+      font-size: 0.88rem; transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--texte); }
+
+    /* ── LAYOUT ── */
+    .page {
+      flex: 1; display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 0; max-width: 1100px;
+      margin: 0 auto; width: 100%;
+      padding: 3rem 2rem;
+      align-items: start;
+    }
+
+    /* ── LEFT: RÉSUMÉ ── */
+    .summary { padding-right: 3rem; }
+
+    .summary-label {
+      font-size: 0.75rem; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--rouge);
+      margin-bottom: 0.8rem;
+    }
+    .summary h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem; line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .summary h1 em { color: var(--rouge); font-style: italic; }
+    .summary > p {
+      color: var(--texte-doux); font-size: 0.95rem;
+      line-height: 1.7; margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    /* Plans */
+    .plans { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2.5rem; }
+
+    .plan {
+      background: var(--noir2);
+      border: 2px solid rgba(255,255,255,0.07);
+      border-radius: 18px; padding: 1.2rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; transition: all 0.2s;
+      position: relative;
+    }
+    .plan:hover { border-color: rgba(232,41,74,0.3); }
+    .plan.selected {
+      border-color: var(--rouge);
+      background: rgba(232,41,74,0.07);
+    }
+
+    .plan-radio {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.2s;
+    }
+    .plan.selected .plan-radio {
+      border-color: var(--rouge);
+      background: var(--rouge);
+    }
+    .plan.selected .plan-radio::after {
+      content: ''; width: 8px; height: 8px;
+      background: #fff; border-radius: 50%;
+    }
+
+    .plan-info { flex: 1; margin-left: 1rem; }
+    .plan-name { font-size: 0.95rem; font-weight: 500; }
+    .plan-desc { font-size: 0.8rem; color: var(--texte-doux); margin-top: 0.15rem; }
+
+    .plan-badge-pop {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--or); color: var(--noir);
+      font-size: 0.68rem; font-weight: 700;
+      padding: 0.2rem 0.8rem; border-radius: 50px;
+      white-space: nowrap; letter-spacing: 0.5px;
+    }
+
+    .plan-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; text-align: right;
+    }
+    .plan-price small {
+      display: block; font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; color: var(--texte-doux); font-weight: 300;
+    }
+    .plan.selected .plan-price { color: var(--rouge); }
+
+    /* Avantages */
+    .avantages {
+      background: var(--noir2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px; padding: 1.5rem;
+    }
+    .avantages h3 {
+      font-size: 0.85rem; font-weight: 600;
+      margin-bottom: 1rem; color: var(--texte-doux);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .avantage-item {
+      display: flex; align-items: center; gap: 0.8rem;
+      font-size: 0.88rem; margin-bottom: 0.7rem; color: var(--texte);
+    }
+    .avantage-item:last-child { margin-bottom: 0; }
+    .check { color: #22c55e; font-size: 1rem; }
+
+    /* ── RIGHT: PAIEMENT ── */
+    .payment-box {
+      background: var(--noir2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px; padding: 2rem;
+      position: sticky; top: 2rem;
+    }
+
+    .payment-box h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; margin-bottom: 0.3rem;
+    }
+    .payment-box > p {
+      color: var(--texte-doux); font-size: 0.85rem;
+      margin-bottom: 1.8rem;
+    }
+
+    /* Opérateurs */
+    .operateurs-label {
+      font-size: 0.75rem; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--texte-doux);
+      margin-bottom: 0.8rem;
+    }
+    .operateurs {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0.7rem; margin-bottom: 1.8rem;
+    }
+
+    .operateur {
+      background: var(--gris);
+      border: 2px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 0.9rem;
+      display: flex; align-items: center; gap: 0.7rem;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .operateur:hover { border-color: rgba(255,255,255,0.2); }
+    .operateur.selected { border-color: currentColor; }
+
+    .op-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .op-orange .op-icon { background: rgba(255,107,0,0.15); }
+    .op-orange.selected { border-color: var(--orange-ci); background: rgba(255,107,0,0.08); }
+    .op-orange .op-name { color: var(--orange-ci); }
+
+    .op-mtn .op-icon { background: rgba(255,204,0,0.15); }
+    .op-mtn.selected { border-color: var(--jaune-mtn); background: rgba(255,204,0,0.08); }
+    .op-mtn .op-name { color: var(--jaune-mtn); }
+
+    .op-wave .op-icon { background: rgba(27,168,224,0.15); }
+    .op-wave.selected { border-color: var(--bleu-wave); background: rgba(27,168,224,0.08); }
+    .op-wave .op-name { color: var(--bleu-wave); }
+
+    .op-moov .op-icon { background: rgba(0,166,81,0.15); }
+    .op-moov.selected { border-color: var(--vert-moov); background: rgba(0,166,81,0.08); }
+    .op-moov .op-name { color: var(--vert-moov); }
+
+    .op-name { font-size: 0.82rem; font-weight: 600; }
+    .op-sub { font-size: 0.7rem; color: var(--texte-doux); }
+
+    /* Numéro */
+    .field-label {
+      font-size: 0.8rem; color: var(--texte-doux);
+      margin-bottom: 0.5rem;
+    }
+    .phone-input-wrap {
+      display: flex; align-items: center;
+      background: var(--gris);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; overflow: hidden;
+      margin-bottom: 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .phone-input-wrap:focus-within { border-color: var(--rouge); }
+
+    .phone-prefix {
+      padding: 0.9rem 1rem;
+      color: var(--texte-doux); font-size: 0.9rem;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      white-space: nowrap; background: var(--gris2);
+    }
+    .phone-input {
+      flex: 1; background: none; border: none; outline: none;
+      color: var(--texte); font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; padding: 0.9rem 1rem;
+      letter-spacing: 1px;
+    }
+    .phone-input::placeholder { color: var(--texte-doux); letter-spacing: 0; }
+
+    /* Récap montant */
+    .recap {
+      background: var(--gris);
+      border-radius: 14px; padding: 1rem 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    .recap-row {
+      display: flex; justify-content: space-between;
+      align-items: center; font-size: 0.88rem;
+      margin-bottom: 0.5rem;
+    }
+    .recap-row:last-child { margin-bottom: 0; }
+    .recap-row span { color: var(--texte-doux); }
+    .recap-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 0.7rem 0;
+    }
+    .recap-total {
+      font-weight: 600; font-size: 1rem;
+    }
+    .recap-total-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; color: var(--rouge);
+    }
+
+    /* Bouton payer */
+    .btn-payer {
+      width: 100%; background: var(--rouge);
+      color: #fff; border: none;
+      padding: 1rem; border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      box-shadow: 0 4px 20px rgba(232,41,74,0.3);
+      margin-bottom: 1rem;
+    }
+    .btn-payer:hover {
+      background: var(--rouge-fonce);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(232,41,74,0.4);
+    }
+    .btn-payer:disabled {
+      background: var(--gris2); color: var(--texte-doux);
+      cursor: not-allowed; transform: none; box-shadow: none;
+    }
+
+    .secure-note {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.4rem; font-size: 0.75rem; color: var(--texte-doux);
+    }
+
+    /* ── ÉTAPES DE PAIEMENT ── */
+    .steps-payment {
+      display: none; text-align: center; padding: 1rem 0;
+    }
+    .steps-payment.active { display: block; }
+    .payment-box.processing .steps-payment { display: block; }
+    .payment-box.processing .payment-form { display: none; }
+
+    .step-circle {
+      width: 70px; height: 70px; border-radius: 50%;
+      margin: 0 auto 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+    .step-circle.loading {
+      background: rgba(232,41,74,0.1);
+      border: 2px solid var(--rouge);
+      animation: pulse 1.5s infinite;
+    }
+    .step-circle.success {
+      background: rgba(34,197,94,0.1);
+      border: 2px solid #22c55e;
+    }
+    .step-circle.error {
+      background: rgba(239,68,68,0.1);
+      border: 2px solid #ef4444;
+    }
+
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; margin-bottom: 0.5rem;
+    }
+    .step-desc {
+      color: var(--texte-doux); font-size: 0.88rem;
+      line-height: 1.6; margin-bottom: 1.5rem;
+    }
+
+    .ussd-box {
+      background: var(--gris);
+      border-radius: 14px; padding: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+    .ussd-label { font-size: 0.75rem; color: var(--texte-doux); margin-bottom: 0.4rem; }
+    .ussd-code {
+      font-size: 1.5rem; font-weight: 700; letter-spacing: 2px;
+      color: var(--or); font-family: 'Playfair Display', serif;
+    }
+
+    .progress-bar-wrap {
+      background: var(--gris); border-radius: 50px;
+      height: 4px; margin: 1.5rem 0; overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%; background: var(--rouge);
+      border-radius: 50px; width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .btn-retour {
+      background: none; border: 1px solid rgba(255,255,255,0.1);
+      color: var(--texte-doux); padding: 0.6rem 1.5rem;
+      border-radius: 50px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; cursor: pointer;
+      transition: all 0.2s; margin-top: 0.5rem;
+    }
+    .btn-retour:hover { border-color: rgba(255,255,255,0.3); color: var(--texte); }
+
+    .btn-acceder {
+      width: 100%; background: #22c55e;
+      color: #fff; border: none;
+      padding: 1rem; border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(34,197,94,0.3);
+    }
+    .btn-acceder:hover { background: #16a34a; transform: translateY(-2px); }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(232,41,74,0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(232,41,74,0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .page { grid-template-columns: 1fr; padding: 1.5rem 1rem; }
+      .summary { padding-right: 0; margin-bottom: 2rem; }
+      .payment-box { position: static; }
+      nav { padding: 1rem 1.2rem; }
+    }
+  </style>
+</head>
+<script type="module" src="Backend.js"></script>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Finile<span>Celibat</span></div>
+  <a href="feed.html" class="nav-back">← Retour au feed</a>
+</nav>
+
+<div class="page">
+
+  <!-- GAUCHE : RÉSUMÉ & PLANS -->
+  <div class="summary">
+    <div class="summary-label">Abonnement</div>
+    <h1>Choisis ton<br/><em>plan d'amour</em></h1>
+    <p>Débloque tous les profils, envoie des demandes illimitées et trouve enfin la bonne personne. Paiement 100% Mobile Money, rapide et sécurisé.</p>
+
+    <!-- PLANS -->
+    <div class="plans" id="plansList">
+
+      <div class="plan" onclick="selectPlan(this, '7j', '500', '7 jours')" data-plan="7j">
+        <div class="plan-radio"></div>
+        <div class="plan-info">
+          <div class="plan-name">Basique — 7 jours</div>
+          <div class="plan-desc">Parfait pour essayer sérieusement</div>
+        </div>
+        <div class="plan-price">500 F<small>FCFA</small></div>
+      </div>
+
+      <div class="plan selected" onclick="selectPlan(this, '1m', '1500', '1 mois')" data-plan="1m">
+        <div class="plan-badge-pop">⭐ Le plus populaire</div>
+        <div class="plan-radio"></div>
+        <div class="plan-info">
+          <div class="plan-name">Standard — 1 mois</div>
+          <div class="plan-desc">Le meilleur rapport qualité/prix</div>
+        </div>
+        <div class="plan-price">1 500 F<small>FCFA</small></div>
+      </div>
+
+      <div class="plan" onclick="selectPlan(this, '3m', '3000', '3 mois')" data-plan="3m">
+        <div class="plan-radio"></div>
+        <div class="plan-info">
+          <div class="plan-name">Premium — 3 mois</div>
+          <div class="plan-desc">Le maximum de chances de trouver</div>
+        </div>
+        <div class="plan-price">3 000 F<small>FCFA</small></div>
+      </div>
+
+    </div>
+
+    <!-- AVANTAGES -->
+    <div class="avantages">
+      <h3>Ce que tu obtiens</h3>
+      <div class="avantage-item"><span class="check">✓</span> Profils débloqués en illimité</div>
+      <div class="avantage-item"><span class="check">✓</span> Demandes de contact illimitées</div>
+      <div class="avantage-item"><span class="check">✓</span> Messagerie privée activée</div>
+      <div class="avantage-item"><span class="check">✓</span> Badge "Membre actif" sur ton profil</div>
+      <div class="avantage-item"><span class="check">✓</span> Apparais en priorité dans les recherches</div>
+      <div class="avantage-item"><span class="check">✓</span> Support prioritaire</div>
+    </div>
+  </div>
+
+  <!-- DROITE : PAIEMENT -->
+  <div class="payment-box" id="paymentBox">
+
+    <!-- FORMULAIRE -->
+    <div class="payment-form" id="paymentForm">
+      <h2>Payer maintenant</h2>
+      <p>Sélectionne ton opérateur et entre ton numéro</p>
+
+      <!-- OPÉRATEURS -->
+      <div class="operateurs-label">Choisir l'opérateur</div>
+      <div class="operateurs">
+        <div class="operateur op-orange selected" onclick="selectOp(this, 'orange')">
+          <div class="op-icon">🟠</div>
+          <div>
+            <div class="op-name">Orange</div>
+            <div class="op-sub">Orange Money</div>
+          </div>
+        </div>
+        <div class="operateur op-mtn" onclick="selectOp(this, 'mtn')">
+          <div class="op-icon">🟡</div>
+          <div>
+            <div class="op-name">MTN</div>
+            <div class="op-sub">Mobile Money</div>
+          </div>
+        </div>
+        <div class="operateur op-wave" onclick="selectOp(this, 'wave')">
+          <div class="op-icon">🔵</div>
+          <div>
+            <div class="op-name">Wave</div>
+            <div class="op-sub">Wave CI</div>
+          </div>
+        </div>
+        <div class="operateur op-moov" onclick="selectOp(this, 'moov')">
+          <div class="op-icon">🟢</div>
+          <div>
+            <div class="op-name">Moov</div>
+            <div class="op-sub">Moov Money</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NUMÉRO -->
+      <div class="field-label">Numéro Mobile Money</div>
+      <div class="phone-input-wrap">
+        <div class="phone-prefix">🇨🇮 +225</div>
+        <input class="phone-input" type="tel" id="phoneInput"
+          placeholder="07 00 00 00 00" maxlength="12"
+          oninput="formatPhone(this); checkForm()"/>
+      </div>
+
+      <!-- RÉCAP -->
+      <div class="recap">
+        <div class="recap-row">
+          <span>Plan choisi</span>
+          <span id="recapPlan" style="color:var(--texte)">Standard – 1 mois</span>
+        </div>
+        <div class="recap-row">
+          <span>Durée</span>
+          <span id="recapDuree" style="color:var(--texte)">30 jours</span>
+        </div>
+        <hr class="recap-divider"/>
+        <div class="recap-row">
+          <span class="recap-total">Total à payer</span>
+          <span class="recap-total-amount" id="recapTotal">1 500 F</span>
+        </div>
+      </div>
+
+      <!-- BOUTON -->
+      <button class="btn-payer" id="btnPayer" onclick="lancerPaiement()" disabled>
+        <span>Payer maintenant</span> <span>→</span>
+      </button>
+      <div class="secure-note">🔒 Paiement 100% sécurisé · Aucune donnée bancaire stockée</div>
+    </div>
+
+    <!-- ÉTAT DE TRAITEMENT -->
+    <div class="steps-payment" id="stepPayment"></div>
+
+  </div>
+</div>
+
+<script>
+  // ── ÉTAT ──
+  let currentPlan = { id: '1m', montant: '1500', label: '1 mois' };
+  let currentOp = 'orange';
+  const ussdCodes = {
+    orange: '#144#',
+    mtn: '*133#',
+    wave: 'App Wave',
+    moov: '*155#'
+  };
+
+  // ── SÉLECTION PLAN ──
+  function selectPlan(el, id, montant, label) {
+    document.querySelectorAll('.plan').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    currentPlan = { id, montant, label };
+    document.getElementById('recapPlan').textContent =
+      el.querySelector('.plan-name').textContent;
+    document.getElementById('recapDuree').textContent =
+      id === '7j' ? '7 jours' : id === '1m' ? '30 jours' : '90 jours';
+    document.getElementById('recapTotal').textContent = 
+      parseInt(montant).toLocaleString('fr-FR') + ' F';
+    checkForm();
+  }
+
+  // ── SÉLECTION OPÉRATEUR ──
+  function selectOp(el, op) {
+    document.querySelectorAll('.operateur').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    currentOp = op;
+  }
+
+  // ── FORMAT NUMÉRO ──
+  function formatPhone(input) {
+    let val = input.value.replace(/\D/g, '');
+    if (val.length > 10) val = val.slice(0, 10);
+    let fmt = '';
+    for (let i = 0; i < val.length; i++) {
+      if (i === 2 || i === 4 || i === 6 || i === 8) fmt += ' ';
+      fmt += val[i];
+    }
+    input.value = fmt;
+  }
+
+  function checkForm() {
+    const phone = document.getElementById('phoneInput').value.replace(/\D/g, '');
+    document.getElementById('btnPayer').disabled = phone.length < 10;
+  }
+
+  // ── LANCER PAIEMENT ──
+  async function lancerPaiement() {
+    const phone = document.getElementById('phoneInput').value.replace(/\D/g, '');
+    
+    if (!phone || phone.length < 10) {
+      alert('Entre un numéro valide !');
+      return;
+    }
+
+    const form = document.getElementById('paymentForm');
+    const stepDiv = document.getElementById('stepPayment');
+    form.style.display = 'none';
+    stepDiv.style.display = 'block';
+
+    // Étape 1 : envoi
+    showStep('loading', 'Envoi de la demande…',
+      `Nous contactons <strong>${getOpName()}</strong> pour <strong>${parseInt(currentPlan.montant).toLocaleString('fr-FR')} F</strong>.`,
+      phone, 0
+    );
+
+    setTimeout(() => {
+      showStep('loading', 'En attente de confirmation',
+        `📱 Compose le code USSD sur ton téléphone <strong>+225 ${phone}</strong> :`,
+        phone, 1
+      );
+    }, 2500);
+
+    setTimeout(async () => {
+      // Enregistrer l'abonnement dans Supabase
+      try {
+        const { getUtilisateurConnecte, creerAbonnement } = await import('./backend.js');
+        const user = await getUtilisateurConnecte();
+        if (user) {
+          await creerAbonnement(
+            user.id,
+            currentPlan.id === '7j' ? 'basique' : currentPlan.id === '1m' ? 'standard' : 'premium',
+            currentOp,
+            parseInt(currentPlan.montant)
+          );
+        }
+      } catch(e) {
+        console.log('Erreur abonnement:', e.message);
+      }
+
+      // Succès
+      showStep('success', 'Paiement confirmé ! 🎉',
+        `Ton abonnement <strong>${currentPlan.label}</strong> est actif. Bonne chance !`,
+        phone, 2
+      );
+    }, 7000);
+  }
+
+  function getOpName() {
+    const names = { orange: 'Orange Money', mtn: 'MTN MoMo', wave: 'Wave', moov: 'Moov Money' };
+    return names[currentOp];
+  }
+
+  function showStep(type, title, desc, phone, stepNum) {
+    const stepDiv = document.getElementById('stepPayment');
+    const icons = { loading: '⏳', success: '✅', error: '❌' };
+    const emojis = { loading: '⏳', success: '🎊', error: '😕' };
+
+    let extra = '';
+
+    if (stepNum === 1) {
+      const code = ussdCodes[currentOp];
+      extra = `
+        <div class="ussd-box">
+          <div class="ussd-label">Code USSD à composer</div>
+          <div class="ussd-code">${code}</div>
+        </div>
+        <p style="font-size:0.78rem; color:var(--texte-doux); margin-bottom:1rem">
+          Compose ce code sur ton téléphone puis confirme avec ton PIN Mobile Money
+        </p>
+      `;
+    }
+
+    if (stepNum === 2) {
+      extra = `
+        <div style="background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.2); border-radius:14px; padding:1rem; margin-bottom:1.2rem; text-align:left;">
+          <div style="font-size:0.78rem; color:var(--texte-doux); margin-bottom:0.3rem;">Récapitulatif</div>
+          <div style="font-size:0.88rem;">Plan : <strong>${currentPlan.label}</strong></div>
+          <div style="font-size:0.88rem;">Montant : <strong style="color:#22c55e">${parseInt(currentPlan.montant).toLocaleString('fr-FR')} FCFA</strong></div>
+          <div style="font-size:0.88rem;">Opérateur : <strong>${getOpName()}</strong></div>
+        </div>
+        <button class="btn-acceder" onclick="window.location.href='feed.html'">
+          Accéder à mon abonnement →
+        </button>
+      `;
+    }
+
+    const progressHtml = stepNum < 2 ? `
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>` : '';
+
+    const retourBtn = stepNum < 2 ? `
+      <button class="btn-retour" onclick="resetPaiement()">← Annuler</button>
+    ` : '';
+
+    stepDiv.innerHTML = `
+      <div class="step-circle ${type}" style="animation-delay:0.1s">
+        ${type === 'loading' ? '<div class="spinner"></div>' : emojis[type]}
+      </div>
+      <div class="step-title">${title}</div>
+      <div class="step-desc">${desc}</div>
+      ${extra}
+      ${progressHtml}
+      ${retourBtn}
+    `;
+
+    if (stepNum < 2) {
+      // Re-init la barre si elle existe
+      const bar = document.getElementById('progressBar');
+      if (bar) {
+        bar.style.width = stepNum === 0 ? '20%' : '60%';
+      }
+    }
+  }
+
+  function updateProgress(pct) {
+    const bar = document.getElementById('progressBar');
+    if (bar) bar.style.width = pct + '%';
+  }
+
+  function resetPaiement() {
+    document.getElementById('paymentForm').style.display = 'block';
+    document.getElementById('stepPayment').style.display = 'none';
+    document.getElementById('stepPayment').innerHTML = '';
+  }
+</script>
+</body>
+</html>

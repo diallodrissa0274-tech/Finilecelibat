@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FinileCelibat – Trouve ton âme sœur en Côte d'Ivoire</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rouge: #E8294A;
+      --rouge-fonce: #b01d35;
+      --or: #F4A940;
+      --noir: #0D0D0D;
+      --noir2: #161616;
+      --gris: #1e1e1e;
+      --texte: #f0ece4;
+      --texte-doux: #a09890;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--noir);
+      color: var(--texte);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background: rgba(13,13,13,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(232,41,74,0.15);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--texte);
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--rouge); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      color: var(--texte-doux); text-decoration: none;
+      font-size: 0.9rem; font-weight: 400;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--texte); }
+    .btn-nav {
+      background: var(--rouge);
+      color: #fff !important;
+      padding: 0.55rem 1.4rem;
+      border-radius: 50px;
+      font-weight: 500 !important;
+      transition: background 0.2s, transform 0.2s !important;
+    }
+    .btn-nav:hover { background: var(--rouge-fonce) !important; transform: scale(1.04); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+      padding: 8rem 2rem 4rem;
+      text-align: center;
+    }
+
+    /* Cercles décoratifs */
+    .hero::before {
+      content: '';
+      position: absolute; top: -150px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(232,41,74,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(244,169,64,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(232,41,74,0.12);
+      border: 1px solid rgba(232,41,74,0.3);
+      color: var(--rouge);
+      font-size: 0.8rem; font-weight: 500;
+      padding: 0.4rem 1.2rem; border-radius: 50px;
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 1.8rem;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      animation: fadeDown 0.9s ease 0.1s both;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--rouge);
+    }
+
+    .hero p {
+      max-width: 520px; margin: 0 auto 2.5rem;
+      color: var(--texte-doux);
+      font-size: 1.1rem; line-height: 1.7;
+      font-weight: 300;
+      animation: fadeDown 1s ease 0.2s both;
+    }
+
+    .hero-cta {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      animation: fadeDown 1s ease 0.3s both;
+    }
+
+    .btn-primary {
+      background: var(--rouge);
+      color: #fff; text-decoration: none;
+      padding: 0.9rem 2.2rem; border-radius: 50px;
+      font-size: 1rem; font-weight: 500;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 30px rgba(232,41,74,0.35);
+    }
+    .btn-primary:hover {
+      background: var(--rouge-fonce);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px rgba(232,41,74,0.45);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--texte); text-decoration: none;
+      padding: 0.9rem 2.2rem; border-radius: 50px;
+      font-size: 1rem; font-weight: 400;
+      border: 1px solid rgba(240,236,228,0.2);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: rgba(240,236,228,0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Avatars flottants */
+    .floating-avatars {
+      display: flex; justify-content: center; gap: 0.5rem;
+      margin-top: 3.5rem;
+      animation: fadeDown 1s ease 0.4s both;
+    }
+    .avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 2px solid var(--noir);
+      overflow: hidden; margin-left: -10px;
+      background: var(--gris);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .avatar:first-child { margin-left: 0; }
+    .avatar-count {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--rouge);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 600;
+      margin-left: -10px;
+      border: 2px solid var(--noir);
+    }
+    .avatar-text {
+      margin-left: 0.8rem;
+      font-size: 0.85rem; color: var(--texte-doux);
+      align-self: center;
+    }
+    .avatar-text strong { color: var(--texte); }
+
+    /* ── COMMENT ÇA MARCHE ── */
+    .section {
+      padding: 6rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      text-align: center;
+      font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--rouge); margin-bottom: 1rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--texte-doux);
+      max-width: 480px; margin: 0 auto 4rem;
+      line-height: 1.7; font-weight: 300;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .step-card {
+      background: var(--noir2);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .step-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--rouge), var(--or));
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .step-card:hover {
+      border-color: rgba(232,41,74,0.3);
+      transform: translateY(-4px);
+    }
+    .step-card:hover::before { opacity: 1; }
+
+    .step-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; color: rgba(232,41,74,0.2);
+      line-height: 1; margin-bottom: 1rem;
+    }
+    .step-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .step-card h3 {
+      font-size: 1.1rem; font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    .step-card p {
+      color: var(--texte-doux); font-size: 0.9rem;
+      line-height: 1.6; font-weight: 300;
+    }
+
+    /* ── PRICING ── */
+    .pricing-section {
+      background: var(--noir2);
+      padding: 6rem 2rem;
+    }
+    .pricing-inner { max-width: 900px; margin: 0 auto; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+      margin-top: 3rem;
+    }
+
+    .price-card {
+      background: var(--gris);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .price-card:hover { transform: translateY(-4px); }
+
+    .price-card.featured {
+      background: var(--rouge);
+      border-color: transparent;
+      position: relative;
+    }
+    .price-card.featured::after {
+      content: '⭐ Populaire';
+      position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+      background: var(--or); color: var(--noir);
+      font-size: 0.7rem; font-weight: 600;
+      padding: 0.3rem 1rem; border-radius: 50px;
+      white-space: nowrap;
+    }
+
+    .price-label {
+      font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--texte-doux);
+      margin-bottom: 0.8rem;
+    }
+    .price-card.featured .price-label { color: rgba(255,255,255,0.7); }
+
+    .price-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 700;
+      line-height: 1;
+    }
+    .price-unit {
+      font-size: 0.85rem; color: var(--texte-doux);
+      margin-top: 0.3rem; margin-bottom: 1.5rem;
+    }
+    .price-card.featured .price-unit { color: rgba(255,255,255,0.7); }
+
+    .price-btn {
+      display: block; width: 100%;
+      background: rgba(255,255,255,0.1);
+      color: var(--texte); text-decoration: none;
+      padding: 0.7rem; border-radius: 50px;
+      font-size: 0.9rem; font-weight: 500;
+      transition: background 0.2s;
+      border: none; cursor: pointer;
+    }
+    .price-card.featured .price-btn {
+      background: #fff; color: var(--rouge);
+    }
+    .price-btn:hover { background: rgba(255,255,255,0.2); }
+    .price-card.featured .price-btn:hover { background: rgba(255,255,255,0.9); }
+
+    /* FREE badge */
+    .price-free {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: var(--or);
+    }
+
+    /* ── CTA FINAL ── */
+    .cta-section {
+      padding: 7rem 2rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(232,41,74,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      margin-bottom: 1.2rem;
+    }
+    .cta-section p {
+      color: var(--texte-doux); max-width: 450px;
+      margin: 0 auto 2.5rem; line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 2rem 2.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+    }
+    .footer-logo span { color: var(--rouge); }
+    footer p {
+      color: var(--texte-doux); font-size: 0.82rem;
+    }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a {
+      color: var(--texte-doux); text-decoration: none;
+      font-size: 0.82rem; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--texte); }
+
+    /* ── MODAL INSCRIPTION ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; animation: fadeIn 0.25s ease; }
+
+    .modal {
+      background: var(--noir2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 2.5rem;
+      width: 100%; max-width: 440px;
+      position: relative;
+      animation: slideUp 0.3s ease;
+    }
+
+    .modal-close {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      background: none; border: none; color: var(--texte-doux);
+      font-size: 1.4rem; cursor: pointer; line-height: 1;
+    }
+
+    .modal h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; margin-bottom: 0.4rem;
+    }
+    .modal p { color: var(--texte-doux); font-size: 0.9rem; margin-bottom: 1.8rem; }
+
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label {
+      display: block; font-size: 0.82rem;
+      color: var(--texte-doux); margin-bottom: 0.4rem;
+    }
+    .form-group input, .form-group select {
+      width: 100%; background: var(--gris);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--texte); font-family: 'DM Sans', sans-serif;
+      padding: 0.75rem 1rem; border-radius: 12px;
+      font-size: 0.95rem; outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--rouge);
+    }
+    .form-group select option { background: var(--gris); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+
+    .btn-submit {
+      width: 100%; background: var(--rouge);
+      color: #fff; border: none;
+      padding: 0.9rem; border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 500;
+      cursor: pointer; margin-top: 0.5rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-submit:hover { background: var(--rouge-fonce); transform: scale(1.02); }
+
+    .form-note {
+      text-align: center; font-size: 0.78rem;
+      color: var(--texte-doux); margin-top: 1rem;
+    }
+    .form-note a { color: var(--rouge); text-decoration: none; }
+
+    .trial-badge {
+      background: rgba(244,169,64,0.1);
+      border: 1px solid rgba(244,169,64,0.3);
+      color: var(--or);
+      border-radius: 12px; padding: 0.7rem 1rem;
+      font-size: 0.82rem; text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { gap: 1rem; }
+      .nav-links a:not(.btn-nav) { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<script type="module" src="Backend.js"></script>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Finile<span>Celibat</span></div>
+  <div class="nav-links">
+    <a href="#comment">Comment ça marche</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#" class="btn-nav" onclick="openModal()">S'inscrire</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-badge">🇨🇮 100% Côte d'Ivoire</div>
+    <h1>Fini le célibat,<br/><em>trouve l'amour</em><br/>enfin.</h1>
+    <p>La plateforme de rencontre sérieuse faite pour les Ivoiriens. Rencontre des célibataires près de chez toi et commence une vraie histoire.</p>
+    <div class="hero-cta">
+      <a href="#" class="btn-primary" onclick="openModal()">Commencer gratuitement</a>
+      <a href="#comment" class="btn-secondary">Voir comment ça marche</a>
+    </div>
+    <div class="floating-avatars">
+      <div class="avatar">👩🏾</div>
+      <div class="avatar">👨🏿</div>
+      <div class="avatar">👩🏽</div>
+      <div class="avatar">👨🏾</div>
+      <div class="avatar-count">+2k</div>
+      <span class="avatar-text"><strong>2 000+</strong> membres inscrits</span>
+    </div>
+  </div>
+</section>
+
+<!-- COMMENT ÇA MARCHE -->
+<section class="section" id="comment">
+  <div class="section-label">Simple & Rapide</div>
+  <h2 class="section-title">Comment ça marche ?</h2>
+  <p class="section-sub">En 3 étapes seulement, tu peux déjà commencer à rencontrer des gens sérieux.</p>
+
+  <div class="steps">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-icon">📝</div>
+      <h3>Crée ton profil</h3>
+      <p>Inscris-toi en 2 minutes. Ajoute tes photos, ta ville, ta description. Ton profil est vérifié pour garantir l'authenticité.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-icon">👀</div>
+      <h3>Explore les profils</h3>
+      <p>Scrolle et découvre des profils de célibataires sérieux en Côte d'Ivoire. Filtre par ville, âge, centres d'intérêt.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-icon">💌</div>
+      <h3>Envoie une demande</h3>
+      <p>Tu vois quelqu'un qui t'intéresse ? Envoie-lui une demande de contact. Si elle accepte, vous pouvez discuter !</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-icon">❤️</div>
+      <h3>Vis ton histoire</h3>
+      <p>Échangez, apprenez à vous connaître et construisez quelque chose de beau. Des milliers de couples sont déjà nés ici.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section class="pricing-section" id="tarifs">
+  <div class="pricing-inner">
+    <div class="section-label">Tarifs</div>
+    <h2 class="section-title">Simple et accessible</h2>
+    <p class="section-sub">1 jour gratuit pour tester, puis un abonnement selon tes envies. Paiement par Mobile Money.</p>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-label">Essai</div>
+        <div class="price-free">Gratuit</div>
+        <div class="price-unit">pendant 1 jour</div>
+        <button class="price-btn" onclick="openModal()">Commencer</button>
+      </div>
+      <div class="price-card">
+        <div class="price-label">Basique</div>
+        <div class="price-amount">500 <small style="font-size:1rem">F</small></div>
+        <div class="price-unit">7 jours</div>
+        <button class="price-btn" onclick="openModal()">Choisir</button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-label">Standard</div>
+        <div class="price-amount">1 500 <small style="font-size:1rem">F</small></div>
+        <div class="price-unit">1 mois</div>
+        <button class="price-btn" onclick="openModal()">Choisir</button>
+      </div>
+      <div class="price-card">
+        <div class="price-label">Premium</div>
+        <div class="price-amount">3 000 <small style="font-size:1rem">F</small></div>
+        <div class="price-unit">3 mois</div>
+        <button class="price-btn" onclick="openModal()">Choisir</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <h2>Prêt(e) à trouver<br/><em style="font-family:'Playfair Display',serif; color:var(--rouge)">l'amour ?</em></h2>
+  <p>Rejoins des milliers de célibataires ivoiriens qui ont déjà fait le premier pas. C'est gratuit pour commencer.</p>
+  <a href="#" class="btn-primary" onclick="openModal()">Créer mon profil gratuitement</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Finile<span>Celibat</span></div>
+  <p>© 2025 FinileCelibat · Côte d'Ivoire</p>
+  <div class="footer-links">
+    <a href="#">Confidentialité</a>
+    <a href="#">Conditions</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<!-- MODAL INSCRIPTION -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>Rejoins-nous 💝</h2>
+    <p>Crée ton compte en 1 minute — 1 jour gratuit offert !</p>
+
+    <div class="trial-badge">
+      🎁 <strong>1 jour d'essai gratuit</strong> — Sans carte bancaire
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Prénom</label>
+        <input type="text" placeholder="Konan" />
+      </div>
+      <div class="form-group">
+        <label>Âge</label>
+        <input type="number" placeholder="25" min="18" max="60" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Je suis</label>
+      <select>
+        <option>Un homme</option>
+        <option>Une femme</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Ville</label>
+      <select>
+        <option>Abidjan</option>
+        <option>Bouaké</option>
+        <option>Daloa</option>
+        <option>Korhogo</option>
+        <option>San-Pédro</option>
+        <option>Yamoussoukro</option>
+        <option>Autre</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Numéro WhatsApp / Téléphone</label>
+      <input type="tel" placeholder="+225 07 00 00 00 00" />
+    </div>
+
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <input type="password" placeholder="••••••••" />
+    </div>
+
+    <button class="btn-submit" onclick="soumettre()">Créer mon compte gratuitement →</button>
+
+    <p class="form-note">
+      En t'inscrivant, tu acceptes nos <a href="#">conditions d'utilisation</a>.
+      Tu as déjà un compte ? <a href="#">Connexion</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    event.preventDefault();
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  async function soumettre() {
+    const prenom = document.querySelector('input[placeholder="Konan"]').value;
+    const age    = document.querySelector('input[placeholder="25"]').value;
+    const sexe   = document.querySelector('select').value;
+    const ville  = document.querySelectorAll('select')[1].value;
+    const tel    = document.querySelector('input[type="tel"]').value;
+    const mdp    = document.querySelector('input[type="password"]').value;
+    const email  = tel + '@finilecelibat.ci';
+
+    if (!prenom || !age || !tel || !mdp) {
+      alert('Remplis tous les champs !');
+      return;
+    }
+
+    try {
+      const { inscrire } = await import('./backend.js');
+      await inscrire(email, mdp, { prenom, age: parseInt(age), sexe, ville, telephone: tel });
+      alert('✅ Compte créé ! Bienvenue ' + prenom);
+      closeModal();
+      window.location.href = 'feed.html';
+    } catch(e) {
+      alert('Erreur : ' + e.message);
+    }
+  }
+
+  window.soumettre = soumettre;
+</script>
+
+</body>
+</html>
