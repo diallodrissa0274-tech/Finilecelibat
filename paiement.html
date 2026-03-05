@@ -401,6 +401,7 @@
       nav { padding: 1rem 1.2rem; }
     }
   </style>
+  <script src="https://cdn.fedapay.com/checkout.js?v=1.1.7"></script>
 </head>
 <script type="module" src="Backend.js"></script>
 <body>
@@ -544,7 +545,9 @@
   </div>
 </div>
 
+
 <script>
+  const FEDAPAY_KEY ='pk_sandbox_p61I_FmFxW1od3zzwQt-sbwN';
   // ── ÉTAT ──
   let currentPlan = { id: '1m', montant: '1500', label: '1 mois' };
   let currentOp = 'orange';
@@ -602,47 +605,44 @@
       return;
     }
 
-    const form = document.getElementById('paymentForm');
-    const stepDiv = document.getElementById('stepPayment');
-    form.style.display = 'none';
-    stepDiv.style.display = 'block';
-
-    // Étape 1 : envoi
-    showStep('loading', 'Envoi de la demande…',
-      `Nous contactons <strong>${getOpName()}</strong> pour <strong>${parseInt(currentPlan.montant).toLocaleString('fr-FR')} F</strong>.`,
-      phone, 0
-    );
-
-    setTimeout(() => {
-      showStep('loading', 'En attente de confirmation',
-        `📱 Compose le code USSD sur ton téléphone <strong>+225 ${phone}</strong> :`,
-        phone, 1
-      );
-    }, 2500);
-
-    setTimeout(async () => {
-      // Enregistrer l'abonnement dans Supabase
-      try {
-        const { getUtilisateurConnecte, creerAbonnement } = await import('./backend.js');
-        const user = await getUtilisateurConnecte();
-        if (user) {
-          await creerAbonnement(
-            user.id,
-            currentPlan.id === '7j' ? 'basique' : currentPlan.id === '1m' ? 'standard' : 'premium',
-            currentOp,
-            parseInt(currentPlan.montant)
-          );
+    // Ouvrir FedaPay
+    FedaPay.init({
+      public_key: FEDAPAY_KEY,
+      transaction: {
+        amount: parseInt(currentPlan.montant),
+        description: 'FinileCelibat - Abonnement ' + currentPlan.label,
+      },
+      customer: {
+        phone_number: {
+          number: phone,
+          country: 'CI'
         }
-      } catch(e) {
-        console.log('Erreur abonnement:', e.message);
+      },
+      onComplete: async function(object) {
+        if (object.reason === 'DIALOG DISMISSED') return;
+        
+        if (object.transaction.status === 'approved') {
+          try {
+            const { getUtilisateurConnecte, creerAbonnement } = await import('./backend.js');
+            const user = await getUtilisateurConnecte();
+            if (user) {
+              await creerAbonnement(
+                user.id,
+                currentPlan.id === '7j' ? 'basique' : currentPlan.id === '1m' ? 'standard' : 'premium',
+                currentOp,
+                parseInt(currentPlan.montant)
+              );
+            }
+          } catch(e) {
+            console.log('Erreur:', e.message);
+          }
+          alert('✅ Paiement confirmé ! Ton abonnement est actif.');
+          window.location.href = 'feed.html';
+        } else {
+          alert('❌ Paiement échoué. Réessaie !');
+        }
       }
-
-      // Succès
-      showStep('success', 'Paiement confirmé ! 🎉',
-        `Ton abonnement <strong>${currentPlan.label}</strong> est actif. Bonne chance !`,
-        phone, 2
-      );
-    }, 7000);
+    }).open();
   }
 
   function getOpName() {
