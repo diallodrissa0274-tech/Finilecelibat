@@ -51,14 +51,17 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--texte); }
-    .btn-nav {
-      background: var(--rouge);
-      color: #fff !important;
-      padding: 0.55rem 1.4rem;
-      border-radius: 50px;
-      font-weight: 500 !important;
-      transition: background 0.2s, transform 0.2s !important;
-    }
+    .btn-nav-outline {
+  background: transparent;
+  color: var(--texte) !important;
+  padding: 0.55rem 1.4rem;
+  border-radius: 50px;
+  font-weight: 500 !important;
+  border: 1px solid rgba(255,255,255,0.2);
+  text-decoration: none;
+  transition: border-color 0.2s;
+}
+.btn-nav-outline:hover { border-color: rgba(255,255,255,0.5); }
     .btn-nav:hover { background: var(--rouge-fonce) !important; transform: scale(1.04); }
 
     /* ── HERO ── */
@@ -493,7 +496,8 @@
   <div class="nav-links">
     <a href="#comment">Comment ça marche</a>
     <a href="#tarifs">Tarifs</a>
-    <a href="#" class="btn-nav" onclick="openModal()">S'inscrire</a>
+    <a href="#" class="btn-nav-outline" onclick="openLoginModal()">Se connecter</a>
+<a href="#" class="btn-nav" onclick="openModal()">S'inscrire</a>
   </div>
 </nav>
 
@@ -605,6 +609,31 @@
     <a href="#">Contact</a>
   </div>
 </footer>
+
+<!-- MODAL CONNEXION -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeLoginModal()">✕</button>
+    <h2>Bon retour 👋</h2>
+    <p>Connecte-toi pour retrouver tes profils</p>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="exemple@gmail.com" />
+    </div>
+
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" />
+    </div>
+
+    <button class="btn-submit" onclick="connecter()">Se connecter →</button>
+
+    <p class="form-note">
+      Pas encore de compte ? <a href="#" onclick="closeLoginModal(); openModal()">S'inscrire</a>
+    </p>
+  </div>
+</div>
 
 <!-- MODAL INSCRIPTION -->
 <div class="modal-overlay" id="modal">
@@ -750,6 +779,48 @@
   }
 
   window.soumettre = soumettre;
+
+  function openLoginModal() {
+    event.preventDefault();
+    document.getElementById('loginModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLoginModal() {
+    document.getElementById('loginModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  async function connecter() {
+    const email = document.getElementById('loginEmail').value;
+    const mdp = document.getElementById('loginPassword').value;
+
+    if (!email || !mdp) {
+      alert('Remplis tous les champs !');
+      return;
+    }
+
+    try {
+      const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+      const supabase = createClient(
+        'https://jdvmrlutysporgaxsrrs.supabase.co',
+        'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u'
+      );
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password: mdp });
+      if (error) throw error;
+
+      localStorage.setItem('fc_user', JSON.stringify(data.user));
+      window.location.href = 'feed.html';
+
+    } catch(e) {
+      alert('Erreur : ' + e.message);
+    }
+  }
+
+  document.getElementById('loginModal').addEventListener('click', function(e) {
+    if (e.target === this) closeLoginModal();
+  });
 </script>
 
 </body>
