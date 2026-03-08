@@ -563,16 +563,72 @@
 
 <script>
   // ── DONNÉES FICTIVES ──
-  const profiles = [
-    { id:1, nom:"Adjoua", age:24, ville:"Abidjan", emoji:"👩🏾", online:true, verified:true, tags:["Cuisine","Voyages"], bio:"Amoureuse de la vie, je cherche quelqu'un de sérieux et sincère pour construire quelque chose de beau.", locked:false },
-    { id:2, nom:"Mamadou", age:28, ville:"Abidjan", emoji:"👨🏿", online:true, verified:true, tags:["Sport","Musique"], bio:"Entrepreneur passionné, je veux rencontrer quelqu'un d'authentique. La bonne humeur avant tout !", locked:false },
-    { id:3, nom:"Raïssa", age:22, ville:"Bouaké", emoji:"👩🏽", online:false, verified:true, tags:["Mode","Art"], bio:"Créative et ambitieuse, j'aime les sorties culturelles et les belles discussions.", locked:false },
-    { id:4, nom:"Koffi", age:31, ville:"Abidjan", emoji:"👨🏾", online:true, verified:false, tags:["Foot","Cuisine"], bio:"Je vis pour les moments simples : un bon repas, une bonne compagnie. Tu es prête ?", locked:false },
-    { id:5, nom:"Nathalie", age:26, ville:"San-Pédro", emoji:"👩🏿", online:false, verified:true, tags:["Lecture","Nature"], bio:"Douce et posée, je crois aux belles rencontres. La patience est une vertu.", locked:false },
-    { id:6, nom:"Ibrahim", age:29, ville:"Abidjan", emoji:"🧔🏿", online:true, verified:true, tags:["Tech","Musique"], bio:"Développeur le jour, musicien la nuit. Je cherche ma moitié.", locked:true },
-    { id:7, nom:"Fatou", age:25, ville:"Yamoussoukro", emoji:"👩🏽‍🦱", online:false, verified:true, tags:["Danse","Voyage"], bio:"La vie est trop courte pour ne pas danser. Je cherche quelqu'un qui aime bouger.", locked:true },
-    { id:8, nom:"Serge", age:33, ville:"Abidjan", emoji:"👨🏾‍💼", online:true, verified:true, tags:["Business","Gym"], bio:"Sérieux dans la vie, romantique dans l'âme. Prêt pour une belle aventure.", locked:true },
-  ];
+  let profiles = [];
+
+async function chargerProfils() {
+  try {
+    const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+    const supabase = createClient(
+      'https://jdvmrlutysporgaxsrrs.supabase.co',
+      'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u'
+    );
+
+    // Récupérer utilisateur connecté
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // Vérifier abonnement
+    let aboActif = false;
+    if (user) {
+      const maintenant = new Date().toISOString();
+      const { data: abo } = await supabase
+        .from('abonnements')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('actif', true)
+        .gte('fin', maintenant)
+        .limit(1)
+        .single();
+      aboActif = !!abo;
+    }
+
+    // Charger les profils (exclure l'utilisateur connecté)
+    const { data, error } = await supabase
+      .from('utilisateurs')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data.length === 0) {
+      document.getElementById('profilesGrid').innerHTML = `
+        <div style="grid-column:1/-1; text-align:center; padding:3rem; color:var(--texte-doux)">
+          <div style="font-size:3rem; margin-bottom:1rem">👀</div>
+          <p>Aucun profil pour l'instant.<br/>Invite des amis à s'inscrire !</p>
+        </div>
+      `;
+      return;
+    }
+
+    profiles = data.map((u, i) => ({
+      id: u.id,
+      nom: u.prenom,
+      age: u.age,
+      ville: u.ville,
+      emoji: u.sexe === 'femme' ? '👩🏾' : '👨🏿',
+      online: u.en_ligne || false,
+      verified: u.verifie || false,
+      tags: [],
+      bio: u.bio || 'Pas encore de description.',
+      locked: !aboActif && i >= 3
+    }));
+
+    renderProfiles();
+
+  } catch(e) {
+    console.log('Erreur:', e.message);
+    renderProfiles();
+  }
+}
 
   let currentProfile = null;
   const sentRequests = new Set();
@@ -704,55 +760,7 @@
   });
 
   // Init
-async function init() {
-  try {
-    const { getUtilisateurConnecte, verifierAbonnement, getProfiles } = await import('./backend.js');
-    
-    // Vérifier si connecté
-    const user = await getUtilisateurConnecte();
-    if (!user) {
-      window.location.href = 'index.html';
-      return;
-    }
-
-    // Vérifier abonnement
-    const abo = await verifierAbonnement(user.id);
-    
-    // Si essai expiré, bloquer plus de profils
-    if (!abo) {
-      document.querySelector('.trial-banner p').innerHTML = 
-        '⚠️ Ton essai gratuit est <strong>expiré</strong>. Abonne-toi pour continuer !';
-    }
-
-    // Charger les vrais profils depuis Supabase
-    const vraisProfils = await getProfiles();
-    if (vraisProfils && vraisProfils.length > 0) {
-      // Remplacer les profils fictifs par les vrais
-      profiles.length = 0;
-      vraisProfils.forEach((p, i) => {
-        profiles.push({
-          id: p.id,
-          nom: p.prenom,
-          age: p.age,
-          ville: p.ville,
-          emoji: p.sexe === 'femme' ? '👩🏾' : '👨🏿',
-          online: p.en_ligne,
-          verified: p.verifie,
-          tags: [],
-          bio: p.bio || 'Pas encore de description.',
-          locked: !abo && i >= 3
-        });
-      });
-    }
-
-  } catch(e) {
-    console.log('Mode démo actif');
-  }
-
-  // Afficher les profils (vrais ou fictifs)
-  renderProfiles();
-}
-
+chargerProfils();
 init();
 </script>
 </body>
