@@ -688,21 +688,59 @@
     const ville  = document.querySelectorAll('select')[1].value;
     const tel    = document.querySelector('input[type="tel"]').value;
     const mdp    = document.querySelector('input[type="password"]').value;
-    const email  = tel + '@finilecelibat.ci';
 
     if (!prenom || !age || !tel || !mdp) {
       alert('Remplis tous les champs !');
       return;
     }
 
+    // Afficher chargement
+    const btn = document.querySelector('.btn-submit');
+    btn.textContent = 'Création en cours...';
+    btn.disabled = true;
+
     try {
-      const { inscrire } = await import('./backend.js');
-      await inscrire(email, mdp, { prenom, age: parseInt(age), sexe, ville, telephone: tel });
-      alert('✅ Compte créé ! Bienvenue ' + prenom);
+      const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+      const supabase = createClient(
+        'https://jdvmrlutysporgaxsrrs.supabase.co',
+        'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u'
+      );
+
+      const email = tel.replace(/\s/g, '') + '@finilecelibat.ci';
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password: mdp,
+        options: {
+          data: {
+            prenom,
+            age: parseInt(age),
+            sexe,
+            ville,
+            telephone: tel
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      // Sauvegarder dans localStorage pour la session
+      localStorage.setItem('fc_user', JSON.stringify({
+        id: data.user.id,
+        prenom,
+        age,
+        sexe,
+        ville
+      }));
+
+      alert('✅ Bienvenue ' + prenom + ' ! Ton compte est créé 🎉');
       closeModal();
       window.location.href = 'feed.html';
+
     } catch(e) {
       alert('Erreur : ' + e.message);
+      btn.textContent = 'Créer mon compte gratuitement →';
+      btn.disabled = false;
     }
   }
 
