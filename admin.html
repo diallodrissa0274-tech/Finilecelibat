@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FinileCelibat – Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --rouge: #E8294A; --or: #F4A940; --vert: #22c55e;
+      --noir: #0D0D0D; --noir2: #141414; --gris: #1e1e1e; --gris2: #2a2a2a;
+      --texte: #f0ece4; --texte-doux: #888079;
+    }
+    body { background: var(--noir); color: var(--texte); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+    /* NAVBAR */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem; background: var(--noir2);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; }
+    .logo span { color: var(--rouge); }
+    .admin-badge {
+      background: rgba(232,41,74,0.1); border: 1px solid rgba(232,41,74,0.3);
+      color: var(--rouge); font-size: 0.75rem; padding: 0.3rem 0.8rem;
+      border-radius: 50px; font-weight: 500;
+    }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-back { color: var(--texte-doux); text-decoration: none; font-size: 0.85rem; }
+    .nav-back:hover { color: var(--texte); }
+
+    /* LAYOUT */
+    .layout { display: flex; min-height: calc(100vh - 60px); }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 220px; flex-shrink: 0;
+      background: var(--noir2);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 1.5rem 1rem;
+    }
+    .sidebar-label {
+      font-size: 0.68rem; text-transform: uppercase;
+      letter-spacing: 2px; color: var(--texte-doux);
+      margin-bottom: 0.8rem; padding: 0 0.5rem;
+    }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 0.7rem;
+      padding: 0.7rem 0.9rem; border-radius: 12px;
+      color: var(--texte-doux); cursor: pointer;
+      font-size: 0.88rem; margin-bottom: 0.2rem;
+      transition: all 0.2s; border: none; background: none;
+      width: 100%; text-align: left;
+    }
+    .sidebar-item:hover { background: var(--gris); color: var(--texte); }
+    .sidebar-item.active { background: rgba(232,41,74,0.1); color: var(--rouge); }
+    .sidebar-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+
+    /* MAIN */
+    .main { flex: 1; padding: 2rem; }
+
+    /* STATS CARDS */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem; margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--noir2); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px; padding: 1.5rem;
+      transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 700; line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .stat-label { font-size: 0.82rem; color: var(--texte-doux); }
+    .stat-change {
+      font-size: 0.75rem; margin-top: 0.5rem;
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .stat-up { color: var(--vert); }
+    .stat-down { color: var(--rouge); }
+
+    /* SECTION */
+    .section { margin-bottom: 2rem; }
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.2rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 1.3rem;
+    }
+    .btn-small {
+      background: var(--gris); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--texte-doux); padding: 0.4rem 1rem;
+      border-radius: 50px; font-size: 0.8rem; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+    }
+    .btn-small:hover { color: var(--texte); border-color: rgba(255,255,255,0.3); }
+
+    /* TABLE */
+    .table-wrap {
+      background: var(--noir2); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px; overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    th {
+      padding: 1rem 1.2rem; text-align: left;
+      font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--texte-doux); font-weight: 500;
+    }
+    td { padding: 1rem 1.2rem; font-size: 0.88rem; }
+    tr:not(:last-child) td { border-bottom: 1px solid rgba(255,255,255,0.04); }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .user-cell { display: flex; align-items: center; gap: 0.8rem; }
+    .user-avatar-sm {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--rouge), var(--or));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .user-name { font-weight: 500; font-size: 0.88rem; }
+    .user-email { font-size: 0.75rem; color: var(--texte-doux); }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.25rem 0.7rem; border-radius: 50px;
+      font-size: 0.72rem; font-weight: 500;
+    }
+    .badge-actif { background: rgba(34,197,94,0.1); color: var(--vert); border: 1px solid rgba(34,197,94,0.2); }
+    .badge-essai { background: rgba(244,169,64,0.1); color: var(--or); border: 1px solid rgba(244,169,64,0.2); }
+    .badge-expire { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+    .badge-premium { background: rgba(232,41,74,0.1); color: var(--rouge); border: 1px solid rgba(232,41,74,0.2); }
+
+    /* ACTIONS */
+    .action-btns { display: flex; gap: 0.4rem; }
+    .btn-action {
+      background: var(--gris); border: none; color: var(--texte-doux);
+      width: 30px; height: 30px; border-radius: 8px;
+      font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .btn-action:hover { background: var(--gris2); color: var(--texte); }
+    .btn-action.danger:hover { background: rgba(239,68,68,0.15); color: #ef4444; }
+
+    /* GRAPHIQUE SIMPLE */
+    .chart-card {
+      background: var(--noir2); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px; padding: 1.5rem;
+    }
+    .chart-title { font-size: 0.9rem; font-weight: 500; margin-bottom: 1.5rem; }
+    .chart-bars { display: flex; align-items: flex-end; gap: 0.5rem; height: 120px; }
+    .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+    .chart-bar {
+      width: 100%; background: rgba(232,41,74,0.15);
+      border-radius: 6px 6px 0 0; transition: all 0.3s;
+      position: relative; cursor: pointer;
+      border: 1px solid rgba(232,41,74,0.2);
+    }
+    .chart-bar:hover { background: rgba(232,41,74,0.4); }
+    .chart-bar-label { font-size: 0.68rem; color: var(--texte-doux); }
+    .chart-bar-val { font-size: 0.72rem; color: var(--texte); font-weight: 500; }
+
+    /* PAIEMENTS */
+    .payment-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.2rem;
+    }
+    .payment-item:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .payment-left { display: flex; align-items: center; gap: 0.8rem; }
+    .payment-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .payment-info .name { font-size: 0.88rem; font-weight: 500; }
+    .payment-info .detail { font-size: 0.75rem; color: var(--texte-doux); }
+    .payment-amount { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--vert); }
+
+    /* TABS */
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+    .tab {
+      padding: 0.5rem 1.2rem; border-radius: 50px;
+      font-size: 0.82rem; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--texte-doux); background: none;
+      font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+    }
+    .tab.active { background: var(--rouge); color: #fff; border-color: var(--rouge); }
+    .tab:hover:not(.active) { border-color: rgba(255,255,255,0.3); color: var(--texte); }
+
+    /* SEARCH */
+    .search-bar {
+      display: flex; align-items: center; gap: 0.6rem;
+      background: var(--gris); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 50px; padding: 0.5rem 1rem; margin-bottom: 1rem;
+      max-width: 300px;
+    }
+    .search-bar input {
+      background: none; border: none; outline: none;
+      color: var(--texte); font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    }
+    .search-bar input::placeholder { color: var(--texte-doux); }
+
+    /* PAGES */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .main { animation: fadeUp 0.4s ease; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div style="display:flex; align-items:center; gap:1rem;">
+    <div class="logo">Finile<span>Celibat</span></div>
+    <div class="admin-badge">⚙️ Admin</div>
+  </div>
+  <div class="nav-right">
+    <a href="feed.html" class="nav-back">← Retour au site</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-label">Navigation</div>
+    <button class="sidebar-item active" onclick="showPage('dashboard', this)">
+      <span class="icon">📊</span> Dashboard
+    </button>
+    <button class="sidebar-item" onclick="showPage('utilisateurs', this)">
+      <span class="icon">👥</span> Utilisateurs
+    </button>
+    <button class="sidebar-item" onclick="showPage('paiements', this)">
+      <span class="icon">💰</span> Paiements
+    </button>
+    <button class="sidebar-item" onclick="showPage('demandes', this)">
+      <span class="icon">💌</span> Demandes
+    </button>
+    <button class="sidebar-item" onclick="showPage('parametres', this)">
+      <span class="icon">⚙️</span> Paramètres
+    </button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ── PAGE DASHBOARD ── -->
+    <div class="page-section active" id="page-dashboard">
+
+      <h1 style="font-family:'Playfair Display',serif; font-size:1.8rem; margin-bottom:0.3rem">
+        Bonjour ! 👋
+      </h1>
+      <p style="color:var(--texte-doux); font-size:0.9rem; margin-bottom:2rem">
+        Voici un aperçu de FinileCelibat aujourd'hui
+      </p>
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value" id="statUsers">24</div>
+          <div class="stat-label">Membres inscrits</div>
+          <div class="stat-change stat-up">↑ +3 cette semaine</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value" id="statRevenu">18 500</div>
+          <div class="stat-label">FCFA ce mois</div>
+          <div class="stat-change stat-up">↑ +5 000 F vs mois dernier</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💳</div>
+          <div class="stat-value" id="statAbos">12</div>
+          <div class="stat-label">Abonnés actifs</div>
+          <div class="stat-change stat-up">↑ +2 nouveaux</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💌</div>
+          <div class="stat-value" id="statDemandes">47</div>
+          <div class="stat-label">Demandes envoyées</div>
+          <div class="stat-change stat-up">↑ Très actif !</div>
+        </div>
+      </div>
+
+      <!-- GRAPHIQUE + PAIEMENTS RÉCENTS -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:2rem;">
+
+        <div class="chart-card">
+          <div class="chart-title">📈 Inscriptions cette semaine</div>
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+
+        <div class="table-wrap">
+          <div style="padding:1rem 1.2rem; border-bottom:1px solid rgba(255,255,255,0.07);">
+            <span style="font-size:0.9rem; font-weight:500;">💰 Derniers paiements</span>
+          </div>
+          <div class="payment-item">
+            <div class="payment-left">
+              <div class="payment-icon" style="background:rgba(255,107,0,0.1);">🟠</div>
+              <div class="payment-info">
+                <div class="name">Adjoua K.</div>
+                <div class="detail">Orange Money · Standard</div>
+              </div>
+            </div>
+            <div class="payment-amount">+1 500 F</div>
+          </div>
+          <div class="payment-item">
+            <div class="payment-left">
+              <div class="payment-icon" style="background:rgba(27,168,224,0.1);">🔵</div>
+              <div class="payment-info">
+                <div class="name">Ibrahim S.</div>
+                <div class="detail">Wave · Premium</div>
+              </div>
+            </div>
+            <div class="payment-amount">+3 000 F</div>
+          </div>
+          <div class="payment-item">
+            <div class="payment-left">
+              <div class="payment-icon" style="background:rgba(255,204,0,0.1);">🟡</div>
+              <div class="payment-info">
+                <div class="name">Koffi M.</div>
+                <div class="detail">MTN MoMo · Basique</div>
+              </div>
+            </div>
+            <div class="payment-amount">+500 F</div>
+          </div>
+          <div class="payment-item">
+            <div class="payment-left">
+              <div class="payment-icon" style="background:rgba(255,107,0,0.1);">🟠</div>
+              <div class="payment-info">
+                <div class="name">Fatou D.</div>
+                <div class="detail">Orange Money · Standard</div>
+              </div>
+            </div>
+            <div class="payment-amount">+1 500 F</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── PAGE UTILISATEURS ── -->
+    <div class="page-section" id="page-utilisateurs">
+      <div class="section-header">
+        <h2 style="font-family:'Playfair Display',serif; font-size:1.5rem;">👥 Utilisateurs</h2>
+        <button class="btn-small">+ Ajouter manuellement</button>
+      </div>
+
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="Rechercher un membre..." oninput="filtrerUsers(this.value)"/>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="filterTab(this, 'tous')">Tous (24)</button>
+        <button class="tab" onclick="filterTab(this, 'actifs')">Actifs (12)</button>
+        <button class="tab" onclick="filterTab(this, 'essai')">Essai (8)</button>
+        <button class="tab" onclick="filterTab(this, 'expires')">Expirés (4)</button>
+      </div>
+
+      <div class="table-wrap">
+        <table id="usersTable">
+          <thead>
+            <tr>
+              <th>Membre</th>
+              <th>Ville</th>
+              <th>Inscription</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersBody">
+            <!-- Généré par JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PAGE PAIEMENTS ── -->
+    <div class="page-section" id="page-paiements">
+      <div class="section-header">
+        <h2 style="font-family:'Playfair Display',serif; font-size:1.5rem;">💰 Paiements</h2>
+      </div>
+
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr); margin-bottom:1.5rem;">
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-value">6 500 F</div>
+          <div class="stat-label">Cette semaine</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📆</div>
+          <div class="stat-value">18 500 F</div>
+          <div class="stat-label">Ce mois</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-value">42 000 F</div>
+          <div class="stat-label">Total général</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Membre</th>
+              <th>Plan</th>
+              <th>Opérateur</th>
+              <th>Montant</th>
+              <th>Date</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="user-cell"><div class="user-avatar-sm">👩🏾</div><div><div class="user-name">Adjoua K.</div></div></div></td>
+              <td>Standard</td>
+              <td>🟠 Orange</td>
+              <td style="color:var(--vert); font-weight:600;">1 500 F</td>
+              <td style="color:var(--texte-doux);">Aujourd'hui</td>
+              <td><span class="badge badge-actif">✓ Confirmé</span></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-avatar-sm">🧔🏿</div><div><div class="user-name">Ibrahim S.</div></div></div></td>
+              <td>Premium</td>
+              <td>🔵 Wave</td>
+              <td style="color:var(--vert); font-weight:600;">3 000 F</td>
+              <td style="color:var(--texte-doux);">Hier</td>
+              <td><span class="badge badge-actif">✓ Confirmé</span></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-avatar-sm">👨🏾</div><div><div class="user-name">Koffi M.</div></div></div></td>
+              <td>Basique</td>
+              <td>🟡 MTN</td>
+              <td style="color:var(--vert); font-weight:600;">500 F</td>
+              <td style="color:var(--texte-doux);">Il y a 2 jours</td>
+              <td><span class="badge badge-actif">✓ Confirmé</span></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-avatar-sm">👩🏽‍🦱</div><div><div class="user-name">Fatou D.</div></div></div></td>
+              <td>Standard</td>
+              <td>🟠 Orange</td>
+              <td style="color:var(--vert); font-weight:600;">1 500 F</td>
+              <td style="color:var(--texte-doux);">Il y a 3 jours</td>
+              <td><span class="badge badge-actif">✓ Confirmé</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PAGE DEMANDES ── -->
+    <div class="page-section" id="page-demandes">
+      <h2 style="font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:1.5rem;">💌 Demandes de contact</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Envoyeur</th>
+              <th>Receveur</th>
+              <th>Message</th>
+              <th>Date</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="user-cell"><div class="user-avatar-sm">👨🏿</div><div class="user-name">Mamadou</div></div></td>
+              <td><div class="user-cell"><div class="user-avatar-sm">👩🏾</div><div class="user-name">Adjoua</div></div></td>
+              <td style="color:var(--texte-doux); font-size:0.82rem;">Bonjour ! J'ai vu ton profil...</td>
+              <td style="color:var(--texte-doux);">Aujourd'hui</td>
+              <td><span class="badge badge-actif">Acceptée</span></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-avatar-sm">👨🏾</div><div class="user-name">Koffi</div></div></td>
+              <td><div class="user-cell"><div class="user-avatar-sm">👩🏽</div><div class="user-name">Raïssa</div></div></td>
+              <td style="color:var(--texte-doux); font-size:0.82rem;">Salut ! Tu m'as l'air sympa</td>
+              <td style="color:var(--texte-doux);">Hier</td>
+              <td><span class="badge badge-essai">En attente</span></td>
+            </tr>
+            <tr>
+              <td><div class="user-cell"><div class="user-avatar-sm">🧔🏿</div><div class="user-name">Ibrahim</div></div></td>
+              <td><div class="user-cell"><div class="user-avatar-sm">👩🏿</div><div class="user-name">Nathalie</div></div></td>
+              <td style="color:var(--texte-doux); font-size:0.82rem;">Bonjour, je cherche...</td>
+              <td style="color:var(--texte-doux);">Il y a 2j</td>
+              <td><span class="badge badge-expire">Refusée</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PAGE PARAMÈTRES ── -->
+    <div class="page-section" id="page-parametres">
+      <h2 style="font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:1.5rem;">⚙️ Paramètres du site</h2>
+
+      <div style="display:grid; gap:1rem; max-width:600px;">
+        <div class="table-wrap" style="padding:1.5rem;">
+          <h3 style="font-size:1rem; margin-bottom:1rem;">🌐 Informations du site</h3>
+          <div style="display:flex; flex-direction:column; gap:0.8rem;">
+            <div>
+              <label style="font-size:0.78rem; color:var(--texte-doux); display:block; margin-bottom:0.3rem;">Nom du site</label>
+              <input type="text" value="FinileCelibat" style="width:100%; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.7rem 1rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none;"/>
+            </div>
+            <div>
+              <label style="font-size:0.78rem; color:var(--texte-doux); display:block; margin-bottom:0.3rem;">Email de contact</label>
+              <input type="email" placeholder="admin@finilecelibat.com" style="width:100%; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.7rem 1rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none;"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap" style="padding:1.5rem;">
+          <h3 style="font-size:1rem; margin-bottom:1rem;">💰 Tarifs</h3>
+          <div style="display:flex; flex-direction:column; gap:0.8rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.88rem;">Basique (7 jours)</span>
+              <input type="number" value="500" style="width:100px; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.5rem 0.8rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none; text-align:right;"/> <span style="font-size:0.8rem; color:var(--texte-doux); margin-left:0.3rem;">F</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.88rem;">Standard (1 mois)</span>
+              <input type="number" value="1500" style="width:100px; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.5rem 0.8rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none; text-align:right;"/> <span style="font-size:0.8rem; color:var(--texte-doux); margin-left:0.3rem;">F</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.88rem;">Premium (3 mois)</span>
+              <input type="number" value="3000" style="width:100px; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.5rem 0.8rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none; text-align:right;"/> <span style="font-size:0.8rem; color:var(--texte-doux); margin-left:0.3rem;">F</span>
+            </div>
+          </div>
+          <button onclick="alert('✅ Tarifs sauvegardés !')" style="margin-top:1rem; background:var(--rouge); color:#fff; border:none; padding:0.6rem 1.5rem; border-radius:50px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer;">Sauvegarder</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // ── DONNÉES UTILISATEURS ──
+  const users = [
+    { nom: 'Adjoua K.', email: 'adjoua@gmail.com', emoji: '👩🏾', ville: 'Abidjan', date: "Aujourd'hui", statut: 'actif' },
+    { nom: 'Mamadou D.', email: 'mamadou@gmail.com', emoji: '👨🏿', ville: 'Abidjan', date: 'Hier', statut: 'actif' },
+    { nom: 'Raïssa T.', email: 'raissa@gmail.com', emoji: '👩🏽', ville: 'Bouaké', date: 'Il y a 2j', statut: 'essai' },
+    { nom: 'Koffi M.', email: 'koffi@gmail.com', emoji: '👨🏾', ville: 'Abidjan', date: 'Il y a 3j', statut: 'actif' },
+    { nom: 'Nathalie S.', email: 'nathalie@gmail.com', emoji: '👩🏿', ville: 'San-Pédro', date: 'Il y a 4j', statut: 'essai' },
+    { nom: 'Ibrahim B.', email: 'ibrahim@gmail.com', emoji: '🧔🏿', ville: 'Abidjan', date: 'Il y a 5j', statut: 'actif' },
+    { nom: 'Fatou D.', email: 'fatou@gmail.com', emoji: '👩🏽‍🦱', ville: 'Yamoussoukro', date: 'Il y a 6j', statut: 'expire' },
+    { nom: 'Serge K.', email: 'serge@gmail.com', emoji: '👨🏾‍💼', ville: 'Abidjan', date: 'Il y a 7j', statut: 'actif' },
+  ];
+
+  function renderUsers(list) {
+    const tbody = document.getElementById('usersBody');
+    tbody.innerHTML = '';
+    list.forEach(u => {
+      const badgeClass = u.statut === 'actif' ? 'badge-actif' : u.statut === 'essai' ? 'badge-essai' : 'badge-expire';
+      const badgeText = u.statut === 'actif' ? '✓ Actif' : u.statut === 'essai' ? '⏳ Essai' : '✕ Expiré';
+      tbody.innerHTML += `
+        <tr>
+          <td>
+            <div class="user-cell">
+              <div class="user-avatar-sm">${u.emoji}</div>
+              <div>
+                <div class="user-name">${u.nom}</div>
+                <div class="user-email">${u.email}</div>
+              </div>
+            </div>
+          </td>
+          <td style="color:var(--texte-doux)">${u.ville}</td>
+          <td style="color:var(--texte-doux)">${u.date}</td>
+          <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+          <td>
+            <div class="action-btns">
+              <button class="btn-action" title="Voir profil">👁️</button>
+              <button class="btn-action" title="Activer abonnement" onclick="activerAbo('${u.nom}')">✅</button>
+              <button class="btn-action danger" title="Supprimer" onclick="supprimerUser('${u.nom}', this)">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  function filtrerUsers(query) {
+    const filtered = users.filter(u =>
+      u.nom.toLowerCase().includes(query.toLowerCase()) ||
+      u.ville.toLowerCase().includes(query.toLowerCase())
+    );
+    renderUsers(filtered);
+  }
+
+  function filterTab(btn, type) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const filtered = type === 'tous' ? users : users.filter(u => u.statut === (type === 'expires' ? 'expire' : type === 'actifs' ? 'actif' : type));
+    renderUsers(filtered);
+  }
+
+  function activerAbo(nom) {
+    alert('✅ Abonnement activé manuellement pour ' + nom);
+  }
+
+  function supprimerUser(nom, btn) {
+    if (confirm('Supprimer ' + nom + ' ?')) {
+      btn.closest('tr').style.opacity = '0';
+      btn.closest('tr').style.transition = 'opacity 0.3s';
+      setTimeout(() => btn.closest('tr').remove(), 300);
+    }
+  }
+
+  // ── NAVIGATION ──
+  function showPage(page, btn) {
+    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ── GRAPHIQUE ──
+  function renderChart() {
+    const data = [
+      { jour: 'Lun', val: 2 }, { jour: 'Mar', val: 5 }, { jour: 'Mer', val: 3 },
+      { jour: 'Jeu', val: 7 }, { jour: 'Ven', val: 4 }, { jour: 'Sam', val: 8 }, { jour: 'Dim', val: 6 }
+    ];
+    const max = Math.max(...data.map(d => d.val));
+    const container = document.getElementById('chartBars');
+    container.innerHTML = '';
+    data.forEach(d => {
+      const pct = (d.val / max) * 100;
+      container.innerHTML += `
+        <div class="chart-bar-wrap">
+          <div class="chart-bar-val">${d.val}</div>
+          <div class="chart-bar" style="height:${pct}%" title="${d.val} inscriptions"></div>
+          <div class="chart-bar-label">${d.jour}</div>
+        </div>
+      `;
+    });
+  }
+
+  // ── INIT ──
+  renderUsers(users);
+  renderChart();
+
+  // Charger vrais stats depuis Supabase
+  async function chargerStats() {
+    try {
+      const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+      const supabase = createClient(
+        'https://jdvmrlutysporgaxsrrs.supabase.co',
+        'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u'
+      );
+      const { count } = await supabase.from('utilisateurs').select('*', { count: 'exact', head: true });
+      if (count) document.getElementById('statUsers').textContent = count;
+    } catch(e) {
+      console.log('Stats démo');
+    }
+  }
+  chargerStats();
+</script>
+</body>
+</html>
