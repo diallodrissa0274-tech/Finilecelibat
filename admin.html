@@ -553,16 +553,51 @@
 
 <script>
   // ── DONNÉES UTILISATEURS ──
-  const users = [
-    { nom: 'Adjoua K.', email: 'adjoua@gmail.com', emoji: '👩🏾', ville: 'Abidjan', date: "Aujourd'hui", statut: 'actif' },
-    { nom: 'Mamadou D.', email: 'mamadou@gmail.com', emoji: '👨🏿', ville: 'Abidjan', date: 'Hier', statut: 'actif' },
-    { nom: 'Raïssa T.', email: 'raissa@gmail.com', emoji: '👩🏽', ville: 'Bouaké', date: 'Il y a 2j', statut: 'essai' },
-    { nom: 'Koffi M.', email: 'koffi@gmail.com', emoji: '👨🏾', ville: 'Abidjan', date: 'Il y a 3j', statut: 'actif' },
-    { nom: 'Nathalie S.', email: 'nathalie@gmail.com', emoji: '👩🏿', ville: 'San-Pédro', date: 'Il y a 4j', statut: 'essai' },
-    { nom: 'Ibrahim B.', email: 'ibrahim@gmail.com', emoji: '🧔🏿', ville: 'Abidjan', date: 'Il y a 5j', statut: 'actif' },
-    { nom: 'Fatou D.', email: 'fatou@gmail.com', emoji: '👩🏽‍🦱', ville: 'Yamoussoukro', date: 'Il y a 6j', statut: 'expire' },
-    { nom: 'Serge K.', email: 'serge@gmail.com', emoji: '👨🏾‍💼', ville: 'Abidjan', date: 'Il y a 7j', statut: 'actif' },
-  ];
+  let users = [];
+
+async function chargerUtilisateurs() {
+  try {
+    const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+    const supabase = createClient(
+      'https://jdvmrlutysporgaxsrrs.supabase.co',
+      'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u'
+    );
+
+    const { data, error } = await supabase
+      .from('utilisateurs')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    users = data.map(u => ({
+      nom: u.prenom,
+      email: u.telephone || 'Non renseigné',
+      emoji: u.sexe === 'femme' ? '👩🏾' : '👨🏿',
+      ville: u.ville,
+      date: new Date(u.created_at).toLocaleDateString('fr-FR'),
+      statut: 'essai',
+      id: u.id
+    }));
+
+    // Mettre à jour le compteur
+    document.getElementById('statUsers').textContent = users.length;
+
+    // Afficher les utilisateurs
+    renderUsers(users);
+
+  } catch(e) {
+    console.log('Erreur chargement:', e.message);
+    // Afficher message vide
+    document.getElementById('usersBody').innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align:center; padding:2rem; color:var(--texte-doux)">
+          Aucun membre inscrit pour l'instant 😊
+        </td>
+      </tr>
+    `;
+  }
+}
 
   function renderUsers(list) {
     const tbody = document.getElementById('usersBody');
@@ -653,8 +688,9 @@
   }
 
   // ── INIT ──
-  renderUsers(users);
-  renderChart();
+  
+chargerUtilisateurs();
+renderChart();
 
   // Charger vrais stats depuis Supabase
   async function chargerStats() {
