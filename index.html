@@ -679,8 +679,8 @@
     document.body.style.overflow = '';
   }
   document.getElementById('modal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
+    if (e.target === this) return;
+});
   async function soumettre() {
     const prenom = document.querySelector('input[placeholder="Konan"]').value;
     const age    = document.querySelector('input[placeholder="25"]').value;
