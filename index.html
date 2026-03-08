@@ -655,9 +655,14 @@
     </div>
 
     <div class="form-group">
-      <label>Mot de passe</label>
-      <input type="password" placeholder="••••••••" />
-    </div>
+  <label>Email</label>
+  <input type="email" id="inputEmail" placeholder="exemple@gmail.com" />
+</div>
+
+<div class="form-group">
+  <label>Mot de passe</label>
+  <input type="password" placeholder="••••••••" />
+</div>
 
     <button class="btn-submit" onclick="soumettre()">Créer mon compte gratuitement →</button>
 
@@ -706,7 +711,7 @@
         'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u'
       );
 
-      const email = tel.replace(/\s/g, '') + '@finilecelibat.ci';
+      const email = document.getElementById('inputEmail').value;
 
       const { data, error } = await supabase.auth.signUp({
         email,
