@@ -640,7 +640,6 @@ async function chargerProfils() {
       const card = document.createElement('div');
       card.className = 'profile-card' + (p.locked ? ' paywall-card' : '');
       const isSent = sentRequests.has(p.id);
-
       card.innerHTML = `
         <div class="card-photo">
           <div class="card-photo-emoji">${p.emoji}</div>
@@ -676,6 +675,13 @@ async function chargerProfils() {
           </div>
         </div>
       `;
+      if (!p.locked) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+          if (e.target.closest('button')) return;
+          window.location.href = 'profil.html?id=' + p.id;
+        });
+      }
       grid.appendChild(card);
     });
   }
