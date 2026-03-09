@@ -13,8 +13,6 @@
       --texte: #f0ece4; --texte-doux: #888079;
     }
     body { background: var(--noir); color: var(--texte); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
-
-    /* NAVBAR */
     nav {
       display: flex; align-items: center; justify-content: space-between;
       padding: 1rem 2rem; background: var(--noir2);
@@ -31,11 +29,7 @@
     .nav-right { display: flex; align-items: center; gap: 1rem; }
     .nav-back { color: var(--texte-doux); text-decoration: none; font-size: 0.85rem; }
     .nav-back:hover { color: var(--texte); }
-
-    /* LAYOUT */
     .layout { display: flex; min-height: calc(100vh - 60px); }
-
-    /* SIDEBAR */
     .sidebar {
       width: 220px; flex-shrink: 0;
       background: var(--noir2);
@@ -58,44 +52,22 @@
     .sidebar-item:hover { background: var(--gris); color: var(--texte); }
     .sidebar-item.active { background: rgba(232,41,74,0.1); color: var(--rouge); }
     .sidebar-item .icon { font-size: 1rem; width: 20px; text-align: center; }
-
-    /* MAIN */
     .main { flex: 1; padding: 2rem; }
-
-    /* STATS CARDS */
     .stats-grid {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem; margin-bottom: 2rem;
     }
     .stat-card {
       background: var(--noir2); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 18px; padding: 1.5rem;
-      transition: transform 0.2s;
+      border-radius: 18px; padding: 1.5rem; transition: transform 0.2s;
     }
     .stat-card:hover { transform: translateY(-3px); }
     .stat-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
-    .stat-value {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem; font-weight: 700; line-height: 1;
-      margin-bottom: 0.3rem;
-    }
+    .stat-value { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.3rem; }
     .stat-label { font-size: 0.82rem; color: var(--texte-doux); }
-    .stat-change {
-      font-size: 0.75rem; margin-top: 0.5rem;
-      display: flex; align-items: center; gap: 0.3rem;
-    }
+    .stat-change { font-size: 0.75rem; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.3rem; }
     .stat-up { color: var(--vert); }
-    .stat-down { color: var(--rouge); }
-
-    /* SECTION */
-    .section { margin-bottom: 2rem; }
-    .section-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 1.2rem;
-    }
-    .section-title {
-      font-family: 'Playfair Display', serif; font-size: 1.3rem;
-    }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; }
     .btn-small {
       background: var(--gris); border: 1px solid rgba(255,255,255,0.1);
       color: var(--texte-doux); padding: 0.4rem 1rem;
@@ -103,23 +75,16 @@
       font-family: 'DM Sans', sans-serif; transition: all 0.2s;
     }
     .btn-small:hover { color: var(--texte); border-color: rgba(255,255,255,0.3); }
-
-    /* TABLE */
     .table-wrap {
       background: var(--noir2); border: 1px solid rgba(255,255,255,0.07);
       border-radius: 18px; overflow: hidden;
     }
     table { width: 100%; border-collapse: collapse; }
     thead tr { border-bottom: 1px solid rgba(255,255,255,0.07); }
-    th {
-      padding: 1rem 1.2rem; text-align: left;
-      font-size: 0.75rem; text-transform: uppercase;
-      letter-spacing: 1px; color: var(--texte-doux); font-weight: 500;
-    }
+    th { padding: 1rem 1.2rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--texte-doux); font-weight: 500; }
     td { padding: 1rem 1.2rem; font-size: 0.88rem; }
     tr:not(:last-child) td { border-bottom: 1px solid rgba(255,255,255,0.04); }
     tr:hover td { background: rgba(255,255,255,0.02); }
-
     .user-cell { display: flex; align-items: center; gap: 0.8rem; }
     .user-avatar-sm {
       width: 34px; height: 34px; border-radius: 50%;
@@ -129,19 +94,10 @@
     }
     .user-name { font-weight: 500; font-size: 0.88rem; }
     .user-email { font-size: 0.75rem; color: var(--texte-doux); }
-
-    /* BADGES */
-    .badge {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      padding: 0.25rem 0.7rem; border-radius: 50px;
-      font-size: 0.72rem; font-weight: 500;
-    }
+    .badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.7rem; border-radius: 50px; font-size: 0.72rem; font-weight: 500; }
     .badge-actif { background: rgba(34,197,94,0.1); color: var(--vert); border: 1px solid rgba(34,197,94,0.2); }
     .badge-essai { background: rgba(244,169,64,0.1); color: var(--or); border: 1px solid rgba(244,169,64,0.2); }
     .badge-expire { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
-    .badge-premium { background: rgba(232,41,74,0.1); color: var(--rouge); border: 1px solid rgba(232,41,74,0.2); }
-
-    /* ACTIONS */
     .action-btns { display: flex; gap: 0.4rem; }
     .btn-action {
       background: var(--gris); border: none; color: var(--texte-doux);
@@ -151,81 +107,37 @@
     }
     .btn-action:hover { background: var(--gris2); color: var(--texte); }
     .btn-action.danger:hover { background: rgba(239,68,68,0.15); color: #ef4444; }
-
-    /* GRAPHIQUE SIMPLE */
-    .chart-card {
-      background: var(--noir2); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 18px; padding: 1.5rem;
-    }
+    .chart-card { background: var(--noir2); border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 1.5rem; }
     .chart-title { font-size: 0.9rem; font-weight: 500; margin-bottom: 1.5rem; }
     .chart-bars { display: flex; align-items: flex-end; gap: 0.5rem; height: 120px; }
     .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
-    .chart-bar {
-      width: 100%; background: rgba(232,41,74,0.15);
-      border-radius: 6px 6px 0 0; transition: all 0.3s;
-      position: relative; cursor: pointer;
-      border: 1px solid rgba(232,41,74,0.2);
-    }
+    .chart-bar { width: 100%; background: rgba(232,41,74,0.15); border-radius: 6px 6px 0 0; transition: all 0.3s; cursor: pointer; border: 1px solid rgba(232,41,74,0.2); }
     .chart-bar:hover { background: rgba(232,41,74,0.4); }
     .chart-bar-label { font-size: 0.68rem; color: var(--texte-doux); }
     .chart-bar-val { font-size: 0.72rem; color: var(--texte); font-weight: 500; }
-
-    /* PAIEMENTS */
-    .payment-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 1.2rem;
-    }
+    .payment-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.2rem; }
     .payment-item:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.04); }
     .payment-left { display: flex; align-items: center; gap: 0.8rem; }
-    .payment-icon {
-      width: 36px; height: 36px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-    }
+    .payment-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
     .payment-info .name { font-size: 0.88rem; font-weight: 500; }
     .payment-info .detail { font-size: 0.75rem; color: var(--texte-doux); }
     .payment-amount { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--vert); }
-
-    /* TABS */
     .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
-    .tab {
-      padding: 0.5rem 1.2rem; border-radius: 50px;
-      font-size: 0.82rem; cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--texte-doux); background: none;
-      font-family: 'DM Sans', sans-serif; transition: all 0.2s;
-    }
+    .tab { padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.82rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); color: var(--texte-doux); background: none; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
     .tab.active { background: var(--rouge); color: #fff; border-color: var(--rouge); }
     .tab:hover:not(.active) { border-color: rgba(255,255,255,0.3); color: var(--texte); }
-
-    /* SEARCH */
-    .search-bar {
-      display: flex; align-items: center; gap: 0.6rem;
-      background: var(--gris); border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 50px; padding: 0.5rem 1rem; margin-bottom: 1rem;
-      max-width: 300px;
-    }
-    .search-bar input {
-      background: none; border: none; outline: none;
-      color: var(--texte); font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
-    }
+    .search-bar { display: flex; align-items: center; gap: 0.6rem; background: var(--gris); border: 1px solid rgba(255,255,255,0.07); border-radius: 50px; padding: 0.5rem 1rem; margin-bottom: 1rem; max-width: 300px; }
+    .search-bar input { background: none; border: none; outline: none; color: var(--texte); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; }
     .search-bar input::placeholder { color: var(--texte-doux); }
-
-    /* PAGES */
     .page-section { display: none; }
     .page-section.active { display: block; }
-
     @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
     .main { animation: fadeUp 0.4s ease; }
-
-    @media (max-width: 768px) {
-      .sidebar { display: none; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 768px) { .sidebar { display: none; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav>
   <div style="display:flex; align-items:center; gap:1rem;">
     <div class="logo">Finile<span>Celibat</span></div>
@@ -237,218 +149,143 @@
 </nav>
 
 <div class="layout">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-label">Navigation</div>
-    <button class="sidebar-item active" onclick="showPage('dashboard', this)">
-      <span class="icon">📊</span> Dashboard
-    </button>
-    <button class="sidebar-item" onclick="showPage('utilisateurs', this)">
-      <span class="icon">👥</span> Utilisateurs
-    </button>
-    <button class="sidebar-item" onclick="showPage('paiements', this)">
-      <span class="icon">💰</span> Paiements
-    </button>
-    <button class="sidebar-item" onclick="showPage('demandes', this)">
-      <span class="icon">💌</span> Demandes
-    </button>
-    <button class="sidebar-item" onclick="showPage('parametres', this)">
-      <span class="icon">⚙️</span> Paramètres
-    </button>
+    <button class="sidebar-item active" onclick="showPage('dashboard', this)"><span class="icon">📊</span> Dashboard</button>
+    <button class="sidebar-item" onclick="showPage('utilisateurs', this)"><span class="icon">👥</span> Utilisateurs</button>
+    <button class="sidebar-item" onclick="showPage('paiements', this)"><span class="icon">💰</span> Paiements</button>
+    <button class="sidebar-item" onclick="showPage('demandes', this)"><span class="icon">💌</span> Demandes</button>
+    <button class="sidebar-item" onclick="showPage('parametres', this)"><span class="icon">⚙️</span> Paramètres</button>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
 
-    <!-- ── PAGE DASHBOARD ── -->
+    <!-- DASHBOARD -->
     <div class="page-section active" id="page-dashboard">
-
-      <h1 style="font-family:'Playfair Display',serif; font-size:1.8rem; margin-bottom:0.3rem">
-        Bonjour ! 👋
-      </h1>
-      <p style="color:var(--texte-doux); font-size:0.9rem; margin-bottom:2rem">
-        Voici un aperçu de FinileCelibat aujourd'hui
-      </p>
-
-      <!-- STATS -->
+      <h1 style="font-family:'Playfair Display',serif; font-size:1.8rem; margin-bottom:0.3rem">Bonjour ! 👋</h1>
+      <p style="color:var(--texte-doux); font-size:0.9rem; margin-bottom:2rem">Voici un aperçu de FinileCelibat aujourd'hui</p>
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon">👥</div>
-          <div class="stat-value" id="statUsers">24</div>
+          <div class="stat-value" id="statUsers">0</div>
           <div class="stat-label">Membres inscrits</div>
-          <div class="stat-change stat-up">↑ +3 cette semaine</div>
+          <div class="stat-change stat-up">↑ En temps réel</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">💰</div>
-          <div class="stat-value" id="statRevenu">18 500</div>
+          <div class="stat-value" id="statRevenu">0</div>
           <div class="stat-label">FCFA ce mois</div>
-          <div class="stat-change stat-up">↑ +5 000 F vs mois dernier</div>
+          <div class="stat-change stat-up">↑ En temps réel</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">💳</div>
-          <div class="stat-value" id="statAbos">12</div>
+          <div class="stat-value" id="statAbos">0</div>
           <div class="stat-label">Abonnés actifs</div>
-          <div class="stat-change stat-up">↑ +2 nouveaux</div>
+          <div class="stat-change stat-up">↑ En temps réel</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">💌</div>
-          <div class="stat-value" id="statDemandes">47</div>
+          <div class="stat-value" id="statDemandes">0</div>
           <div class="stat-label">Demandes envoyées</div>
-          <div class="stat-change stat-up">↑ Très actif !</div>
+          <div class="stat-change stat-up">↑ En temps réel</div>
         </div>
       </div>
-
-      <!-- GRAPHIQUE + PAIEMENTS RÉCENTS -->
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:2rem;">
-
         <div class="chart-card">
           <div class="chart-title">📈 Inscriptions cette semaine</div>
           <div class="chart-bars" id="chartBars"></div>
         </div>
-
         <div class="table-wrap">
           <div style="padding:1rem 1.2rem; border-bottom:1px solid rgba(255,255,255,0.07);">
             <span style="font-size:0.9rem; font-weight:500;">💰 Derniers paiements</span>
           </div>
-          <div style="padding:1rem 1.2rem; border-bottom:1px solid rgba(255,255,255,0.07);">
-  <span style="font-size:0.9rem; font-weight:500;">💰 Derniers paiements</span>
-</div>
-<div id="recentPayments">
-  <div style="text-align:center; padding:2rem; color:var(--texte-doux); font-size:0.85rem;">
-    Aucun paiement pour l'instant
-  </div>
-</div>
-            <div class="payment-amount">+3 000 F</div>
-          </div>
-          <div class="payment-item">
-            <div class="payment-left">
-              <div class="payment-icon" style="background:rgba(255,204,0,0.1);">🟡</div>
-              <div class="payment-info">
-                <div class="name">Koffi M.</div>
-                <div class="detail">MTN MoMo · Basique</div>
-              </div>
-            </div>
-            <div class="payment-amount">+500 F</div>
-          </div>
-          <div class="payment-item">
-            <div class="payment-left">
-              <div class="payment-icon" style="background:rgba(255,107,0,0.1);">🟠</div>
-              <div class="payment-info">
-                <div class="name">Fatou D.</div>
-                <div class="detail">Orange Money · Standard</div>
-              </div>
-            </div>
-            <div class="payment-amount">+1 500 F</div>
+          <div id="recentPayments">
+            <div style="text-align:center; padding:2rem; color:var(--texte-doux); font-size:0.85rem;">Chargement...</div>
           </div>
         </div>
       </div>
-
     </div>
 
-    <!-- ── PAGE UTILISATEURS ── -->
+    <!-- UTILISATEURS -->
     <div class="page-section" id="page-utilisateurs">
       <div class="section-header">
         <h2 style="font-family:'Playfair Display',serif; font-size:1.5rem;">👥 Utilisateurs</h2>
         <button class="btn-small">+ Ajouter manuellement</button>
       </div>
-
       <div class="search-bar">
         <span>🔍</span>
         <input type="text" placeholder="Rechercher un membre..." oninput="filtrerUsers(this.value)"/>
       </div>
-
       <div class="tabs">
-        <button class="tab active" onclick="filterTab(this, 'tous')">Tous (24)</button>
-        <button class="tab" onclick="filterTab(this, 'actifs')">Actifs (12)</button>
-        <button class="tab" onclick="filterTab(this, 'essai')">Essai (8)</button>
-        <button class="tab" onclick="filterTab(this, 'expires')">Expirés (4)</button>
+        <button class="tab active" onclick="filterTab(this, 'tous')">Tous</button>
+        <button class="tab" onclick="filterTab(this, 'actif')">Actifs</button>
+        <button class="tab" onclick="filterTab(this, 'essai')">Essai</button>
+        <button class="tab" onclick="filterTab(this, 'expire')">Expirés</button>
       </div>
-
       <div class="table-wrap">
-        <table id="usersTable">
+        <table>
           <thead>
-            <tr>
-              <th>Membre</th>
-              <th>Ville</th>
-              <th>Inscription</th>
-              <th>Statut</th>
-              <th>Actions</th>
-            </tr>
+            <tr><th>Membre</th><th>Ville</th><th>Inscription</th><th>Statut</th><th>Actions</th></tr>
           </thead>
           <tbody id="usersBody">
-            <!-- Généré par JS -->
+            <tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--texte-doux)">Chargement...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- ── PAGE PAIEMENTS ── -->
+    <!-- PAIEMENTS -->
     <div class="page-section" id="page-paiements">
       <div class="section-header">
         <h2 style="font-family:'Playfair Display',serif; font-size:1.5rem;">💰 Paiements</h2>
       </div>
-
       <div class="stats-grid" style="grid-template-columns:repeat(3,1fr); margin-bottom:1.5rem;">
         <div class="stat-card">
           <div class="stat-icon">📅</div>
-          <div class="stat-value">6 500 F</div>
+          <div class="stat-value" id="revenuSemaine">0 F</div>
           <div class="stat-label">Cette semaine</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">📆</div>
-          <div class="stat-value">18 500 F</div>
+          <div class="stat-value" id="revenuMois">0 F</div>
           <div class="stat-label">Ce mois</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">🏆</div>
-          <div class="stat-value">42 000 F</div>
+          <div class="stat-value" id="revenuTotal">0 F</div>
           <div class="stat-label">Total général</div>
         </div>
       </div>
-
       <div class="table-wrap">
         <table>
           <thead>
-            <tr>
-              <th>Membre</th>
-              <th>Plan</th>
-              <th>Opérateur</th>
-              <th>Montant</th>
-              <th>Date</th>
-              <th>Statut</th>
-            </tr>
+            <tr><th>Membre</th><th>Plan</th><th>Opérateur</th><th>Montant</th><th>Date</th><th>Statut</th></tr>
           </thead>
           <tbody id="paymentsBody">
+            <tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--texte-doux)">Chargement...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- ── PAGE DEMANDES ── -->
+    <!-- DEMANDES -->
     <div class="page-section" id="page-demandes">
       <h2 style="font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:1.5rem;">💌 Demandes de contact</h2>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr>
-              <th>Envoyeur</th>
-              <th>Receveur</th>
-              <th>Message</th>
-              <th>Date</th>
-              <th>Statut</th>
-            </tr>
+            <tr><th>Envoyeur</th><th>Receveur</th><th>Message</th><th>Date</th><th>Statut</th></tr>
           </thead>
           <tbody id="demandesBody">
-</tbody>
+            <tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--texte-doux)">Chargement...</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
 
-    <!-- ── PAGE PARAMÈTRES ── -->
+    <!-- PARAMÈTRES -->
     <div class="page-section" id="page-parametres">
       <h2 style="font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:1.5rem;">⚙️ Paramètres du site</h2>
-
       <div style="display:grid; gap:1rem; max-width:600px;">
         <div class="table-wrap" style="padding:1.5rem;">
           <h3 style="font-size:1rem; margin-bottom:1rem;">🌐 Informations du site</h3>
@@ -463,21 +300,29 @@
             </div>
           </div>
         </div>
-
         <div class="table-wrap" style="padding:1.5rem;">
           <h3 style="font-size:1rem; margin-bottom:1rem;">💰 Tarifs</h3>
           <div style="display:flex; flex-direction:column; gap:0.8rem;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:0.88rem;">Basique (7 jours)</span>
-              <input type="number" value="500" style="width:100px; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.5rem 0.8rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none; text-align:right;"/> <span style="font-size:0.8rem; color:var(--texte-doux); margin-left:0.3rem;">F</span>
+              <div style="display:flex; align-items:center; gap:0.3rem;">
+                <input type="number" value="500" style="width:100px; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.5rem 0.8rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none; text-align:right;"/>
+                <span style="font-size:0.8rem; color:var(--texte-doux);">F</span>
+              </div>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:0.88rem;">Standard (1 mois)</span>
-              <input type="number" value="1500" style="width:100px; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.5rem 0.8rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none; text-align:right;"/> <span style="font-size:0.8rem; color:var(--texte-doux); margin-left:0.3rem;">F</span>
+              <div style="display:flex; align-items:center; gap:0.3rem;">
+                <input type="number" value="1500" style="width:100px; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.5rem 0.8rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none; text-align:right;"/>
+                <span style="font-size:0.8rem; color:var(--texte-doux);">F</span>
+              </div>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <span style="font-size:0.88rem;">Premium (3 mois)</span>
-              <input type="number" value="3000" style="width:100px; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.5rem 0.8rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none; text-align:right;"/> <span style="font-size:0.8rem; color:var(--texte-doux); margin-left:0.3rem;">F</span>
+              <div style="display:flex; align-items:center; gap:0.3rem;">
+                <input type="number" value="3000" style="width:100px; background:var(--gris); border:1px solid rgba(255,255,255,0.1); color:var(--texte); padding:0.5rem 0.8rem; border-radius:10px; font-family:'DM Sans',sans-serif; outline:none; text-align:right;"/>
+                <span style="font-size:0.8rem; color:var(--texte-doux);">F</span>
+              </div>
             </div>
           </div>
           <button onclick="alert('✅ Tarifs sauvegardés !')" style="margin-top:1rem; background:var(--rouge); color:#fff; border:none; padding:0.6rem 1.5rem; border-radius:50px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer;">Sauvegarder</button>
@@ -489,82 +334,164 @@
 </div>
 
 <script>
-  // ── DONNÉES UTILISATEURS ──
+  const SUPABASE_URL = 'https://jdvmrlutysporgaxsrrs.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u';
+  let supabase;
   let users = [];
 
-async function chargerUtilisateurs() {
-  try {
+  async function init() {
     const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-    const supabase = createClient(
-      'https://jdvmrlutysporgaxsrrs.supabase.co',
-      'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u'
-    );
-
-    const { data, error } = await supabase
-      .from('utilisateurs')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    users = data.map(u => ({
-      nom: u.prenom,
-      email: u.telephone || 'Non renseigné',
-      emoji: u.sexe === 'femme' ? '👩🏾' : '👨🏿',
-      ville: u.ville,
-      date: new Date(u.created_at).toLocaleDateString('fr-FR'),
-      statut: 'essai',
-      id: u.id
-    }));
-
-    // Mettre à jour le compteur
-    document.getElementById('statUsers').textContent = users.length;
-
-    // Afficher les utilisateurs
-    renderUsers(users);
-
-  } catch(e) {
-    console.log('Erreur chargement:', e.message);
-    // Afficher message vide
-    document.getElementById('usersBody').innerHTML = `
-      <tr>
-        <td colspan="5" style="text-align:center; padding:2rem; color:var(--texte-doux)">
-          Aucun membre inscrit pour l'instant 😊
-        </td>
-      </tr>
-    `;
+    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    await chargerUtilisateurs();
+    chargerPaiements();
+    chargerDemandesAdmin();
+    renderChart();
   }
-}
+
+  async function chargerUtilisateurs() {
+    try {
+      const { data, error } = await supabase
+        .from('utilisateurs')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      users = data.map(u => ({
+        nom: u.prenom,
+        email: u.telephone || 'Non renseigné',
+        emoji: u.sexe === 'femme' ? '👩🏾' : '👨🏿',
+        ville: u.ville || '-',
+        date: new Date(u.created_at).toLocaleDateString('fr-FR'),
+        statut: 'essai',
+        id: u.id
+      }));
+      document.getElementById('statUsers').textContent = users.length;
+      renderUsers(users);
+    } catch(e) {
+      document.getElementById('usersBody').innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--texte-doux)">Aucun membre inscrit pour l'instant 😊</td></tr>`;
+    }
+  }
+
+  async function chargerPaiements() {
+    try {
+      const { data, error } = await supabase
+        .from('abonnements')
+        .select('*, utilisateur:utilisateurs!abonnements_user_id_fkey(prenom, sexe)')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        const vide = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--texte-doux)">Aucun paiement pour l'instant</td></tr>`;
+        document.getElementById('paymentsBody').innerHTML = vide;
+        document.getElementById('recentPayments').innerHTML = `<div style="text-align:center; padding:2rem; color:var(--texte-doux); font-size:0.85rem;">Aucun paiement pour l'instant</div>`;
+        return;
+      }
+      const maintenant = new Date();
+      const debutSemaine = new Date(maintenant); debutSemaine.setDate(maintenant.getDate() - 7);
+      const debutMois = new Date(maintenant.getFullYear(), maintenant.getMonth(), 1);
+      let totalSemaine = 0, totalMois = 0, totalGeneral = 0;
+      data.forEach(p => {
+        const date = new Date(p.created_at);
+        const montant = p.montant || 0;
+        totalGeneral += montant;
+        if (date >= debutMois) totalMois += montant;
+        if (date >= debutSemaine) totalSemaine += montant;
+      });
+      document.getElementById('statRevenu').textContent = totalMois.toLocaleString('fr-FR');
+      document.getElementById('statAbos').textContent = data.filter(p => p.actif).length;
+      document.getElementById('revenuSemaine').textContent = totalSemaine.toLocaleString('fr-FR') + ' F';
+      document.getElementById('revenuMois').textContent = totalMois.toLocaleString('fr-FR') + ' F';
+      document.getElementById('revenuTotal').textContent = totalGeneral.toLocaleString('fr-FR') + ' F';
+      const tbody = document.getElementById('paymentsBody');
+      tbody.innerHTML = '';
+      data.forEach(p => {
+        const emoji = p.utilisateur?.sexe === 'femme' ? '👩🏾' : '👨🏿';
+        const date = new Date(p.created_at).toLocaleDateString('fr-FR');
+        tbody.innerHTML += `
+          <tr>
+            <td><div class="user-cell"><div class="user-avatar-sm">${emoji}</div><div><div class="user-name">${p.utilisateur?.prenom || 'Inconnu'}</div></div></div></td>
+            <td>${p.plan || '-'}</td>
+            <td>${p.operateur || '-'}</td>
+            <td style="color:var(--vert); font-weight:600;">${(p.montant || 0).toLocaleString('fr-FR')} F</td>
+            <td style="color:var(--texte-doux);">${date}</td>
+            <td><span class="badge badge-actif">✓ Confirmé</span></td>
+          </tr>`;
+      });
+      document.getElementById('recentPayments').innerHTML = data.slice(0, 4).map(p => {
+        const emoji = p.utilisateur?.sexe === 'femme' ? '👩🏾' : '👨🏿';
+        return `
+          <div class="payment-item">
+            <div class="payment-left">
+              <div class="payment-icon" style="background:rgba(232,41,74,0.1);">${emoji}</div>
+              <div class="payment-info">
+                <div class="name">${p.utilisateur?.prenom || 'Inconnu'}</div>
+                <div class="detail">${p.operateur || '-'} · ${p.plan || '-'}</div>
+              </div>
+            </div>
+            <div class="payment-amount">+${(p.montant || 0).toLocaleString('fr-FR')} F</div>
+          </div>`;
+      }).join('');
+    } catch(e) {
+      console.log('Erreur paiements:', e.message);
+      document.getElementById('paymentsBody').innerHTML = `<tr><td colspan="6" style="text-align:center; padding:2rem; color:var(--texte-doux)">Aucun paiement pour l'instant</td></tr>`;
+      document.getElementById('recentPayments').innerHTML = `<div style="text-align:center; padding:2rem; color:var(--texte-doux); font-size:0.85rem;">Aucun paiement pour l'instant</div>`;
+    }
+  }
+
+  async function chargerDemandesAdmin() {
+    try {
+      const { data, error } = await supabase
+        .from('demandes')
+        .select(`*, envoyeur:utilisateurs!demandes_envoyeur_id_fkey(prenom, sexe), receveur:utilisateurs!demandes_receveur_id_fkey(prenom, sexe)`)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      document.getElementById('statDemandes').textContent = data?.length || 0;
+      const tbody = document.getElementById('demandesBody');
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--texte-doux)">Aucune demande pour l'instant</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = '';
+      data.forEach(d => {
+        const eEmoji = d.envoyeur?.sexe === 'femme' ? '👩🏾' : '👨🏿';
+        const rEmoji = d.receveur?.sexe === 'femme' ? '👩🏾' : '👨🏿';
+        const badgeClass = d.statut === 'acceptee' ? 'badge-actif' : d.statut === 'refusee' ? 'badge-expire' : 'badge-essai';
+        const badgeText = d.statut === 'acceptee' ? 'Acceptée' : d.statut === 'refusee' ? 'Refusée' : 'En attente';
+        const date = new Date(d.created_at).toLocaleDateString('fr-FR');
+        tbody.innerHTML += `
+          <tr>
+            <td><div class="user-cell"><div class="user-avatar-sm">${eEmoji}</div><div class="user-name">${d.envoyeur?.prenom || '-'}</div></div></td>
+            <td><div class="user-cell"><div class="user-avatar-sm">${rEmoji}</div><div class="user-name">${d.receveur?.prenom || '-'}</div></div></td>
+            <td style="color:var(--texte-doux); font-size:0.82rem;">${d.message || '-'}</td>
+            <td style="color:var(--texte-doux);">${date}</td>
+            <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+          </tr>`;
+      });
+    } catch(e) {
+      document.getElementById('demandesBody').innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--texte-doux)">Aucune demande pour l'instant</td></tr>`;
+    }
+  }
 
   function renderUsers(list) {
     const tbody = document.getElementById('usersBody');
+    if (list.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem; color:var(--texte-doux)">Aucun membre trouvé</td></tr>`;
+      return;
+    }
     tbody.innerHTML = '';
     list.forEach(u => {
       const badgeClass = u.statut === 'actif' ? 'badge-actif' : u.statut === 'essai' ? 'badge-essai' : 'badge-expire';
       const badgeText = u.statut === 'actif' ? '✓ Actif' : u.statut === 'essai' ? '⏳ Essai' : '✕ Expiré';
       tbody.innerHTML += `
         <tr>
-          <td>
-            <div class="user-cell">
-              <div class="user-avatar-sm">${u.emoji}</div>
-              <div>
-                <div class="user-name">${u.nom}</div>
-                <div class="user-email">${u.email}</div>
-              </div>
-            </div>
-          </td>
+          <td><div class="user-cell"><div class="user-avatar-sm">${u.emoji}</div><div><div class="user-name">${u.nom}</div><div class="user-email">${u.email}</div></div></div></td>
           <td style="color:var(--texte-doux)">${u.ville}</td>
           <td style="color:var(--texte-doux)">${u.date}</td>
           <td><span class="badge ${badgeClass}">${badgeText}</span></td>
-          <td>
-            <div class="action-btns">
-              <button class="btn-action" title="Voir profil">👁️</button>
-              <button class="btn-action" title="Activer abonnement" onclick="activerAbo('${u.nom}')">✅</button>
-              <button class="btn-action danger" title="Supprimer" onclick="supprimerUser('${u.nom}', this)">🗑️</button>
-            </div>
-          </td>
-        </tr>
-      `;
+          <td><div class="action-btns">
+            <button class="btn-action" title="Voir profil">👁️</button>
+            <button class="btn-action" title="Activer abonnement" onclick="activerAbo('${u.nom}')">✅</button>
+            <button class="btn-action danger" title="Supprimer" onclick="supprimerUser('${u.nom}', this)">🗑️</button>
+          </div></td>
+        </tr>`;
     });
   }
 
@@ -579,13 +506,10 @@ async function chargerUtilisateurs() {
   function filterTab(btn, type) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
-    const filtered = type === 'tous' ? users : users.filter(u => u.statut === (type === 'expires' ? 'expire' : type === 'actifs' ? 'actif' : type));
-    renderUsers(filtered);
+    renderUsers(type === 'tous' ? users : users.filter(u => u.statut === type));
   }
 
-  function activerAbo(nom) {
-    alert('✅ Abonnement activé manuellement pour ' + nom);
-  }
+  function activerAbo(nom) { alert('✅ Abonnement activé manuellement pour ' + nom); }
 
   function supprimerUser(nom, btn) {
     if (confirm('Supprimer ' + nom + ' ?')) {
@@ -595,7 +519,6 @@ async function chargerUtilisateurs() {
     }
   }
 
-  // ── NAVIGATION ──
   function showPage(page, btn) {
     document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
@@ -603,49 +526,31 @@ async function chargerUtilisateurs() {
     btn.classList.add('active');
   }
 
-  // ── GRAPHIQUE ──
   function renderChart() {
-    const data = [
-      { jour: 'Lun', val: 2 }, { jour: 'Mar', val: 5 }, { jour: 'Mer', val: 3 },
-      { jour: 'Jeu', val: 7 }, { jour: 'Ven', val: 4 }, { jour: 'Sam', val: 8 }, { jour: 'Dim', val: 6 }
-    ];
-    const max = Math.max(...data.map(d => d.val));
+    const jours = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+    const vals = [0, 0, 0, 0, 0, 0, 0];
+    users.forEach(u => {
+      const d = new Date(u.date.split('/').reverse().join('-'));
+      if (!isNaN(d)) {
+        const j = d.getDay();
+        vals[j === 0 ? 6 : j - 1]++;
+      }
+    });
+    const max = Math.max(...vals, 1);
     const container = document.getElementById('chartBars');
     container.innerHTML = '';
-    data.forEach(d => {
-      const pct = (d.val / max) * 100;
+    jours.forEach((jour, i) => {
+      const pct = (vals[i] / max) * 100;
       container.innerHTML += `
         <div class="chart-bar-wrap">
-          <div class="chart-bar-val">${d.val}</div>
-          <div class="chart-bar" style="height:${pct}%" title="${d.val} inscriptions"></div>
-          <div class="chart-bar-label">${d.jour}</div>
-        </div>
-      `;
+          <div class="chart-bar-val">${vals[i]}</div>
+          <div class="chart-bar" style="height:${pct || 5}%"></div>
+          <div class="chart-bar-label">${jour}</div>
+        </div>`;
     });
   }
 
-  // ── INIT ──
-  
-chargerUtilisateurs();
-renderChart();
-
-  // Charger vrais stats depuis Supabase
-  async function chargerStats() {
-    try {
-      const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-      const supabase = createClient(
-        'https://jdvmrlutysporgaxsrrs.supabase.co',
-        'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u'
-      );
-      const { count } = await supabase.from('utilisateurs').select('*', { count: 'exact', head: true });
-      if (count) document.getElementById('statUsers').textContent = count;
-    } catch(e) {
-      console.log('Stats démo');
-    }
-  }
-  chargerStats();
-chargerPaiements();
-chargerDemandesAdmin();
+  init();
 </script>
 </body>
 </html>
