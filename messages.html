@@ -374,114 +374,211 @@
 </div>
 
 <script>
-  function ouvrirConv(el, nom, emoji, online) {
-    document.querySelectorAll('.conv-item').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    // Enlever badge
-    const badge = el.querySelector('.conv-badge');
-    if (badge) badge.remove();
-    // Mettre à jour header
-    document.getElementById('chatAvatar').textContent = emoji;
-    document.getElementById('chatName').textContent = nom;
-    document.getElementById('chatStatus').textContent = online ? 'En ligne' : 'Hors ligne';
-    document.getElementById('chatStatus').style.color = online ? '#22c55e' : 'var(--texte-doux)';
+  const SUPABASE_URL = 'https://jdvmrlutysporgaxsrrs.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u';
+
+let supabase;
+let currentUser;
+let currentDemandeId;
+
+async function init() {
+  const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+  supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Vérifier connexion
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) { window.location.href = 'index.html'; return; }
+  currentUser = user;
+
+  // Charger demandes et conversations
+  chargerDemandes();
+  chargerConversations();
+
+  // Écouter nouveaux messages en temps réel
+  supabase.channel('messages')
+    .on('postgres_changes', {
+      event: 'INSERT', schema: 'public', table: 'messages'
+    }, payload => {
+      if (currentDemandeId === payload.new.demande_id) {
+        afficherMessage(payload.new, false);
+      }
+    })
+    .subscribe();
+}
+
+async function chargerDemandes() {
+  const { data } = await supabase
+    .from('demandes')
+    .select(`*, envoyeur:utilisateurs!demandes_envoyeur_id_fkey(prenom, age, ville, sexe)`)
+    .eq('receveur_id', currentUser.id)
+    .eq('statut', 'en_attente');
+
+  const section = document.querySelector('.demandes-section');
+  if (!data || data.length === 0) {
+    section.style.display = 'none';
+    return;
   }
 
-  function envoyerMessage() {
-    const input = document.getElementById('messageInput');
-    const texte = input.value.trim();
-    if (!texte) return;
-
-    const messages = document.getElementById('chatMessages');
-    const heure = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-
-    const msg = document.createElement('div');
-    msg.className = 'msg moi';
-    msg.style.animation = 'fadeUp 0.3s ease';
-    msg.innerHTML = `
-      <div class="msg-avatar">😊</div>
-      <div>
-        <div class="msg-bubble">${texte}</div>
-        <div class="msg-time">${heure}</div>
+  document.querySelector('.demandes-title').textContent = `💌 Demandes reçues (${data.length})`;
+  const container = document.querySelector('.demandes-section');
+  
+  // Garder seulement le titre et recréer les items
+  container.innerHTML = `<div class="demandes-title">💌 Demandes reçues (${data.length})</div>`;
+  
+  data.forEach(d => {
+    const emoji = d.envoyeur.sexe === 'femme' ? '👩🏾' : '👨🏿';
+    const item = document.createElement('div');
+    item.className = 'demande-item';
+    item.innerHTML = `
+      <div class="demande-avatar">${emoji}</div>
+      <div class="demande-info">
+        <div class="demande-name">${d.envoyeur.prenom}, ${d.envoyeur.age}</div>
+        <div class="demande-msg">${d.message || 'Demande de contact'}</div>
+      </div>
+      <div class="demande-actions">
+        <button class="btn-accept" onclick="accepterDemande('${d.id}', '${d.envoyeur.prenom}', '${emoji}', this)">✓</button>
+        <button class="btn-refuse" onclick="refuserDemande('${d.id}', this)">✕</button>
       </div>
     `;
-    messages.appendChild(msg);
-    messages.scrollTop = messages.scrollHeight;
+    container.appendChild(item);
+  });
+}
 
-    input.value = '';
-    input.style.height = 'auto';
+async function chargerConversations() {
+  const { data } = await supabase
+    .from('demandes')
+    .select(`
+      *,
+      envoyeur:utilisateurs!demandes_envoyeur_id_fkey(id, prenom, sexe, en_ligne),
+      receveur:utilisateurs!demandes_receveur_id_fkey(id, prenom, sexe, en_ligne)
+    `)
+    .eq('statut', 'acceptee')
+    .or(`envoyeur_id.eq.${currentUser.id},receveur_id.eq.${currentUser.id}`);
 
-    // Simuler réponse après 1.5s
-    setTimeout(() => {
-      const reponses = [
-        'Haha oui ! 😄',
-        'C\'est vrai !',
-        'Je vois ce que tu veux dire 😊',
-        'Super ! On peut se retrouver quelque part ?',
-        'Tu es trop sympa ! ❤️'
-      ];
-      const rep = reponses[Math.floor(Math.random() * reponses.length)];
-      const nom = document.getElementById('chatName').textContent;
-      const avatar = document.getElementById('chatAvatar').textContent;
-
-      const repMsg = document.createElement('div');
-      repMsg.className = 'msg';
-      repMsg.style.animation = 'fadeUp 0.3s ease';
-      repMsg.innerHTML = `
-        <div class="msg-avatar">${avatar}</div>
-        <div>
-          <div class="msg-bubble">${rep}</div>
-          <div class="msg-time">${new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</div>
-        </div>
-      `;
-      messages.appendChild(repMsg);
-      messages.scrollTop = messages.scrollHeight;
-    }, 1500);
+  const convList = document.getElementById('convList');
+  
+  if (!data || data.length === 0) {
+    convList.innerHTML = `
+      <div style="text-align:center; padding:2rem; color:var(--texte-doux); font-size:0.85rem;">
+        Aucune conversation pour l'instant.<br/>Envoie des demandes sur le feed !
+      </div>
+    `;
+    return;
   }
 
-  function accepterDemande(btn, nom, emoji) {
-    const item = btn.closest('.demande-item');
-    item.style.animation = 'fadeUp 0.3s ease reverse';
-    setTimeout(() => {
-      item.remove();
-      // Ajouter à la liste des conversations
-      const convList = document.getElementById('convList');
-      const newConv = document.createElement('div');
-      newConv.className = 'conv-item';
-      newConv.onclick = function() { ouvrirConv(this, nom, emoji, true); };
-      newConv.innerHTML = `
-        <div class="conv-avatar">
-          ${emoji}
-          <div class="conv-online"></div>
-        </div>
-        <div class="conv-info">
-          <div class="conv-name">${nom}</div>
-          <div class="conv-last">Nouvelle conversation !</div>
-        </div>
-        <div class="conv-meta">
-          <span class="conv-time">À l'instant</span>
-          <span class="conv-badge">1</span>
-        </div>
-      `;
-      convList.prepend(newConv);
-      // Mettre à jour le compteur
-      const titre = document.querySelector('.demandes-title');
-      const count = document.querySelectorAll('.demande-item').length;
-      titre.textContent = `💌 Demandes reçues (${count})`;
-    }, 300);
+  convList.innerHTML = '';
+  data.forEach(d => {
+    const autre = d.envoyeur_id === currentUser.id ? d.receveur : d.envoyeur;
+    const emoji = autre.sexe === 'femme' ? '👩🏾' : '👨🏿';
+    const online = autre.en_ligne;
+
+    const item = document.createElement('div');
+    item.className = 'conv-item';
+    item.onclick = () => ouvrirConversation(d.id, autre.prenom, emoji, online, item);
+    item.innerHTML = `
+      <div class="conv-avatar">
+        ${emoji}
+        ${online ? '<div class="conv-online"></div>' : ''}
+      </div>
+      <div class="conv-info">
+        <div class="conv-name">${autre.prenom}</div>
+        <div class="conv-last">Clique pour discuter</div>
+      </div>
+      <div class="conv-meta">
+        <span class="conv-time">Récent</span>
+      </div>
+    `;
+    convList.appendChild(item);
+  });
+}
+
+async function ouvrirConversation(demandeId, nom, emoji, online, el) {
+  document.querySelectorAll('.conv-item').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  currentDemandeId = demandeId;
+
+  document.getElementById('chatAvatar').textContent = emoji;
+  document.getElementById('chatName').textContent = nom;
+  document.getElementById('chatStatus').textContent = online ? 'En ligne' : 'Hors ligne';
+  document.getElementById('chatStatus').style.color = online ? '#22c55e' : 'var(--texte-doux)';
+
+  // Charger messages
+  const { data } = await supabase
+    .from('messages')
+    .select('*')
+    .eq('demande_id', demandeId)
+    .order('created_at', { ascending: true });
+
+  const container = document.getElementById('chatMessages');
+  container.innerHTML = '<div class="date-sep"><span>Conversation</span></div>';
+
+  if (data && data.length > 0) {
+    data.forEach(m => afficherMessage(m, m.auteur_id === currentUser.id));
+  } else {
+    container.innerHTML += `<div style="text-align:center; color:var(--texte-doux); font-size:0.85rem; margin-top:2rem;">Commencez la conversation ! 👋</div>`;
+  }
+  container.scrollTop = container.scrollHeight;
+}
+
+function afficherMessage(msg, estMoi) {
+  const container = document.getElementById('chatMessages');
+  const heure = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  const div = document.createElement('div');
+  div.className = `msg ${estMoi ? 'moi' : ''}`;
+  div.style.animation = 'fadeUp 0.3s ease';
+  div.innerHTML = `
+    <div class="msg-avatar">${estMoi ? '😊' : document.getElementById('chatAvatar').textContent}</div>
+    <div>
+      <div class="msg-bubble">${msg.contenu}</div>
+      <div class="msg-time">${heure}</div>
+    </div>
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+async function envoyerMessage() {
+  if (!currentDemandeId) {
+    alert('Sélectionne une conversation d\'abord !');
+    return;
+  }
+  const input = document.getElementById('messageInput');
+  const texte = input.value.trim();
+  if (!texte) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  const { error } = await supabase
+    .from('messages')
+    .insert({ demande_id: currentDemandeId, auteur_id: currentUser.id, contenu: texte });
+
+  if (error) {
+    alert('Erreur envoi : ' + error.message);
+    return;
   }
 
-  function refuserDemande(btn) {
-    const item = btn.closest('.demande-item');
-    item.style.opacity = '0';
-    item.style.transition = 'opacity 0.3s';
-    setTimeout(() => {
-      item.remove();
-      const titre = document.querySelector('.demandes-title');
-      const count = document.querySelectorAll('.demande-item').length;
-      titre.textContent = `💌 Demandes reçues (${count})`;
-    }, 300);
-  }
+  afficherMessage({ contenu: texte, created_at: new Date().toISOString(), auteur_id: currentUser.id }, true);
+}
+
+async function accepterDemande(demandeId, nom, emoji, btn) {
+  await supabase.from('demandes').update({ statut: 'acceptee' }).eq('id', demandeId);
+  const item = btn.closest('.demande-item');
+  item.remove();
+  chargerConversations();
+}
+
+async function refuserDemande(demandeId, btn) {
+  await supabase.from('demandes').update({ statut: 'refusee' }).eq('id', demandeId);
+  btn.closest('.demande-item').remove();
+}
+
+function ouvrirConv(el, nom, emoji, online) {
+  document.querySelectorAll('.conv-item').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+init();
 </script>
 </body>
 </html>
