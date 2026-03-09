@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FinileCelibat – Profil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --rouge: #E8294A; --or: #F4A940; --vert: #22c55e;
+      --noir: #0D0D0D; --noir2: #141414; --gris: #1e1e1e; --gris2: #2a2a2a;
+      --texte: #f0ece4; --texte-doux: #888079;
+    }
+    body { background: var(--noir); color: var(--texte); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem; background: var(--noir2);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky; top: 0; z-index: 50;
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; }
+    .logo span { color: var(--rouge); }
+    .nav-back { color: var(--texte-doux); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .nav-back:hover { color: var(--texte); }
+
+    /* COVER */
+    .cover {
+      height: 220px;
+      background: linear-gradient(135deg, #1a0a0e, #2d0f18, #1a0a0e);
+      position: relative; overflow: hidden;
+    }
+    .cover::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(232,41,74,0.3), transparent 70%);
+    }
+
+    /* PROFIL HEADER */
+    .profil-header {
+      max-width: 800px; margin: 0 auto;
+      padding: 0 2rem; position: relative;
+    }
+    .avatar-wrap {
+      position: relative; display: inline-block;
+      margin-top: -60px; margin-bottom: 1rem;
+    }
+    .avatar {
+      width: 120px; height: 120px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--rouge), var(--or));
+      border: 4px solid var(--noir);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.5rem; overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .online-dot {
+      position: absolute; bottom: 8px; right: 8px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--vert); border: 3px solid var(--noir);
+    }
+
+    .profil-info { padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.07); margin-bottom: 1.5rem; }
+    .profil-nom { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 0.3rem; }
+    .profil-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .profil-meta span { font-size: 0.85rem; color: var(--texte-doux); display: flex; align-items: center; gap: 0.3rem; }
+    .profil-bio { font-size: 0.92rem; color: var(--texte-doux); line-height: 1.7; max-width: 600px; }
+
+    /* ACTIONS */
+    .profil-actions { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--rouge); color: #fff; border: none;
+      padding: 0.75rem 1.8rem; border-radius: 50px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      font-weight: 500; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-primary:hover { background: #b01d35; transform: translateY(-2px); }
+    .btn-secondary {
+      background: var(--gris); color: var(--texte);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 0.75rem 1.8rem; border-radius: 50px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-2px); }
+
+    /* CONTENU */
+    .profil-content {
+      max-width: 800px; margin: 0 auto;
+      padding: 0 2rem 3rem;
+      display: grid; grid-template-columns: 1fr 320px; gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--noir2); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px; padding: 1.5rem; margin-bottom: 1rem;
+    }
+    .card-title {
+      font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--texte-doux);
+      margin-bottom: 1rem;
+    }
+
+    /* INFOS */
+    .info-grid { display: flex; flex-direction: column; gap: 0.8rem; }
+    .info-item { display: flex; align-items: center; gap: 0.8rem; }
+    .info-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--gris); display: flex; align-items: center;
+      justify-content: center; font-size: 1rem; flex-shrink: 0;
+    }
+    .info-label { font-size: 0.72rem; color: var(--texte-doux); }
+    .info-val { font-size: 0.9rem; font-weight: 500; }
+
+    /* TAGS */
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag {
+      background: var(--gris); border: 1px solid rgba(255,255,255,0.08);
+      color: var(--texte-doux); padding: 0.3rem 0.9rem;
+      border-radius: 50px; font-size: 0.78rem;
+    }
+
+    /* PHOTOS */
+    .photos-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;
+    }
+    .photo-item {
+      aspect-ratio: 1; border-radius: 12px;
+      background: var(--gris); overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; cursor: pointer; transition: transform 0.2s;
+      position: relative;
+    }
+    .photo-item:hover { transform: scale(1.03); }
+    .photo-item img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-lock {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; border-radius: 12px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* MODAL DEMANDE */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--noir2); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px; padding: 2rem; width: 90%; max-width: 420px;
+      transform: translateY(20px); transition: transform 0.3s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .modal p { font-size: 0.88rem; color: var(--texte-doux); margin-bottom: 1.5rem; }
+    .modal textarea {
+      width: 100%; background: var(--gris);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 1rem;
+      color: var(--texte); font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; resize: none; outline: none;
+      min-height: 100px; transition: border-color 0.2s;
+      margin-bottom: 1rem;
+    }
+    .modal textarea:focus { border-color: var(--rouge); }
+    .modal-btns { display: flex; gap: 0.8rem; }
+    .btn-cancel {
+      flex: 1; background: var(--gris); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--texte-doux); padding: 0.75rem; border-radius: 50px;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-cancel:hover { color: var(--texte); }
+    .btn-envoyer {
+      flex: 2; background: var(--rouge); border: none;
+      color: #fff; padding: 0.75rem; border-radius: 50px;
+      font-family: 'DM Sans', sans-serif; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-envoyer:hover { background: #b01d35; }
+
+    /* PAYWALL */
+    .paywall-card {
+      background: linear-gradient(135deg, rgba(232,41,74,0.1), rgba(244,169,64,0.05));
+      border: 1px solid rgba(232,41,74,0.2);
+      border-radius: 18px; padding: 1.5rem; text-align: center;
+      margin-bottom: 1rem;
+    }
+    .paywall-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .paywall-card p { font-size: 0.82rem; color: var(--texte-doux); margin-bottom: 1rem; }
+    .btn-abonner {
+      background: linear-gradient(135deg, var(--rouge), #b01d35);
+      color: #fff; border: none; padding: 0.7rem 1.5rem;
+      border-radius: 50px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; cursor: pointer; width: 100%;
+      transition: all 0.2s;
+    }
+    .btn-abonner:hover { transform: translateY(-2px); }
+
+    /* LOADING */
+    .loading {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 60vh; font-size: 0.9rem; color: var(--texte-doux);
+    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    .profil-header, .profil-content { animation: fadeUp 0.4s ease; }
+
+    @media (max-width: 768px) {
+      .profil-content { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Finile<span>Celibat</span></div>
+  <a href="feed.html" class="nav-back">← Retour au feed</a>
+</nav>
+
+<div id="loadingState" class="loading">Chargement du profil...</div>
+
+<div id="profilContent" style="display:none">
+  <div class="cover"></div>
+
+  <div class="profil-header">
+    <div class="avatar-wrap">
+      <div class="avatar" id="profilAvatar"></div>
+      <div class="online-dot" id="onlineDot" style="display:none"></div>
+    </div>
+
+    <div class="profil-info">
+      <div class="profil-nom" id="profilNom"></div>
+      <div class="profil-meta">
+        <span>🎂 <span id="profilAge"></span> ans</span>
+        <span>📍 <span id="profilVille"></span></span>
+        <span id="profilOnlineText"></span>
+      </div>
+      <div class="profil-bio" id="profilBio"></div>
+    </div>
+
+    <div class="profil-actions" id="profilActions"></div>
+  </div>
+
+  <div class="profil-content">
+    <div>
+      <!-- PHOTOS -->
+      <div class="card">
+        <div class="card-title">📸 Photos</div>
+        <div class="photos-grid" id="photosGrid">
+          <div class="photo-item"><div class="photo-lock">🔒</div></div>
+          <div class="photo-item"><div class="photo-lock">🔒</div></div>
+          <div class="photo-item"><div class="photo-lock">🔒</div></div>
+        </div>
+      </div>
+
+      <!-- À PROPOS -->
+      <div class="card">
+        <div class="card-title">💬 À propos</div>
+        <p id="profilAbout" style="font-size:0.9rem; color:var(--texte-doux); line-height:1.7;"></p>
+      </div>
+    </div>
+
+    <div>
+      <!-- INFOS -->
+      <div class="card">
+        <div class="card-title">ℹ️ Informations</div>
+        <div class="info-grid" id="infoGrid"></div>
+      </div>
+
+      <!-- PAYWALL ou BOUTON -->
+      <div id="sideAction"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DEMANDE -->
+<div class="modal-overlay" id="modalDemande">
+  <div class="modal">
+    <h3>Envoyer une demande 💌</h3>
+    <p id="modalDesc">Écris un message pour te présenter</p>
+    <textarea id="messageTexte" placeholder="Bonjour ! J'ai vu ton profil et tu m'as l'air sympa..."></textarea>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="fermerModal()">Annuler</button>
+      <button class="btn-envoyer" onclick="envoyerDemande()">Envoyer 💌</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://jdvmrlutysporgaxsrrs.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_big7CLf15TgRr2Jwd58fRg_q1Pjni6u';
+  let supabase;
+  let currentUser;
+  let profilData;
+  let aboActif = false;
+
+  async function init() {
+    const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+    supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Vérifier connexion
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { window.location.href = 'index.html'; return; }
+    currentUser = user;
+
+    // Récupérer l'ID du profil depuis l'URL
+    const params = new URLSearchParams(window.location.search);
+    const profilId = params.get('id');
+
+    if (!profilId) { window.location.href = 'feed.html'; return; }
+
+    // Vérifier abonnement
+    const maintenant = new Date().toISOString();
+    const { data: abo } = await supabase
+      .from('abonnements')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .eq('actif', true)
+      .gte('fin', maintenant)
+      .limit(1)
+      .single();
+    aboActif = !!abo;
+
+    // Charger le profil
+    const { data: profil, error } = await supabase
+      .from('utilisateurs')
+      .select('*')
+      .eq('id', profilId)
+      .single();
+
+    if (error || !profil) {
+      document.getElementById('loadingState').textContent = 'Profil introuvable 😕';
+      return;
+    }
+
+    profilData = profil;
+    afficherProfil(profil);
+  }
+
+  function afficherProfil(p) {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('profilContent').style.display = 'block';
+
+    const emoji = p.sexe === 'femme' ? '👩🏾' : '👨🏿';
+    const estMoi = p.id === currentUser.id;
+
+    // Avatar
+    if (p.photo_url) {
+      document.getElementById('profilAvatar').innerHTML = `<img src="${p.photo_url}" alt="Photo de ${p.prenom}"/>`;
+    } else {
+      document.getElementById('profilAvatar').textContent = emoji;
+    }
+
+    // Online
+    if (p.en_ligne) {
+      document.getElementById('onlineDot').style.display = 'block';
+      document.getElementById('profilOnlineText').innerHTML = '<span style="color:#22c55e">● En ligne</span>';
+    } else {
+      document.getElementById('profilOnlineText').textContent = '○ Hors ligne';
+    }
+
+    // Infos de base
+    document.getElementById('profilNom').textContent = p.prenom + (p.age ? ', ' + p.age : '');
+    document.getElementById('profilAge').textContent = p.age || '-';
+    document.getElementById('profilVille').textContent = p.ville || '-';
+    document.getElementById('profilBio').textContent = p.bio || 'Pas encore de description.';
+    document.getElementById('profilAbout').textContent = p.bio || 'Pas encore de description.';
+
+    // Infos détaillées
+    const infos = [
+      { icon: '🎂', label: 'Âge', val: p.age ? p.age + ' ans' : '-' },
+      { icon: '📍', label: 'Ville', val: p.ville || '-' },
+      { icon: '👤', label: 'Sexe', val: p.sexe || '-' },
+      { icon: '📱', label: 'Téléphone', val: aboActif ? (p.telephone || '-') : '🔒 Abonnement requis' },
+    ];
+    document.getElementById('infoGrid').innerHTML = infos.map(i => `
+      <div class="info-item">
+        <div class="info-icon">${i.icon}</div>
+        <div>
+          <div class="info-label">${i.label}</div>
+          <div class="info-val">${i.val}</div>
+        </div>
+      </div>
+    `).join('');
+
+    // Actions
+    const actionsEl = document.getElementById('profilActions');
+    if (estMoi) {
+      actionsEl.innerHTML = `
+        <button class="btn-primary" onclick="window.location.href='mon-profil.html'">✏️ Modifier mon profil</button>
+      `;
+    } else if (aboActif) {
+      actionsEl.innerHTML = `
+        <button class="btn-primary" onclick="ouvrirModal()">💌 Envoyer une demande</button>
+        <button class="btn-secondary" onclick="window.location.href='messages.html'">💬 Messages</button>
+      `;
+    } else {
+      actionsEl.innerHTML = `
+        <button class="btn-primary" onclick="window.location.href='paiement.html'">🔓 S'abonner pour contacter</button>
+      `;
+    }
+
+    // Side action
+    const sideEl = document.getElementById('sideAction');
+    if (!aboActif && !estMoi) {
+      sideEl.innerHTML = `
+        <div class="paywall-card">
+          <h3>🔒 Contenu réservé</h3>
+          <p>Abonne-toi pour voir le numéro, envoyer des demandes et discuter !</p>
+          <button class="btn-abonner" onclick="window.location.href='paiement.html'">
+            S'abonner dès 500 F →
+          </button>
+        </div>
+      `;
+    }
+  }
+
+  function ouvrirModal() {
+    document.getElementById('modalDesc').textContent = `Envoie une demande à ${profilData.prenom}`;
+    document.getElementById('modalDemande').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function fermerModal() {
+    document.getElementById('modalDemande').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  async function envoyerDemande() {
+    const message = document.getElementById('messageTexte').value.trim();
+    if (!message) { alert('Écris un message !'); return; }
+
+    const btn = document.querySelector('.btn-envoyer');
+    btn.textContent = 'Envoi...';
+    btn.disabled = true;
+
+    try {
+      const { error } = await supabase.from('demandes').insert({
+        envoyeur_id: currentUser.id,
+        receveur_id: profilData.id,
+        message: message,
+        statut: 'en_attente'
+      });
+
+      if (error) throw error;
+
+      fermerModal();
+      alert('✅ Demande envoyée à ' + profilData.prenom + ' !');
+
+    } catch(e) {
+      alert('Erreur : ' + e.message);
+      btn.textContent = 'Envoyer 💌';
+      btn.disabled = false;
+    }
+  }
+
+  document.getElementById('modalDemande').addEventListener('click', function(e) {
+    if (e.target === this) fermerModal();
+  });
+
+  init();
+</script>
+</body>
+</html>
