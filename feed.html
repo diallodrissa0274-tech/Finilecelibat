@@ -506,7 +506,7 @@
       </select>
     </div>
 
-    <p class="section-count"><strong>124</strong> profils disponibles près de toi</p>
+    <p class="section-count"><span id="profilesCount">0</span> profils disponibles près de toi</p>
 
     <!-- PROFILES GRID -->
     <div class="profiles-grid" id="profilesGrid"></div>
@@ -621,6 +621,7 @@ async function chargerProfils() {
       bio: u.bio || 'Pas encore de description.',
       locked: !aboActif && i >= 3
     }));
+    document.getElementById('profilesCount').textContent = profiles.length;
 
     renderProfiles();
 
